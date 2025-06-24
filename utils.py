@@ -9,6 +9,8 @@ import numpy as np
 import pandas as pd
 import datetime
 from PIL import Image
+import json
+import yaml
 import plotly.express as px
 from plotly.subplots import make_subplots
 import torch
@@ -17,10 +19,7 @@ from torch.utils.data import Dataset
 from torchvision.transforms.functional import pil_to_tensor
 import torchvision.transforms.v2 as transforms
 import torch.optim as optim
-import json
-import yaml
 from torchinfo import summary
-
 
 class MakeColdAutoencoders:
     """
