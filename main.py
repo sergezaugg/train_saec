@@ -1,6 +1,6 @@
 #--------------------------------
 # Author : Serge Zaugg
-# Description : Train a spectrogram auto encoder
+# Description : Train spectrogram auto-encoders
 #--------------------------------
 
 import torch
@@ -25,5 +25,5 @@ at.train_autoencoder(devel = True)
 er = EvaluateReconstruction(device = device)
 er.evaluate_reconstruction_on_examples(
     path_images = "D:/xc_real_projects/xc_corvus_corax/xc_spectrograms", 
-    time_stamp_model = "20250624_104906", n_images = 64, shuffle = False).show()
+    time_stamp_model = "20250624_111856", n_images = 64, shuffle = False).show()
 
