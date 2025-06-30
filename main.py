@@ -4,15 +4,15 @@
 #--------------------------------
 
 import torch
-from utils import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 torch.cuda.is_available()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 cold_dir = "D:/xc_real_projects/pytorch_cold_models"
 hot_dir = "D:/xc_real_projects/pytorch_hot_models"
 
-dat_tra_dir = "D:/xc_real_projects/xc_all_4_pooled/images_24000sps_20250608_221808"
-dat_tes_dir = "D:/xc_real_projects/xc_sw_europe/xc_spectrograms" 
+dat_tra_dir = "dev/data/train/images"
+dat_tes_dir = "dev/data/test/images" 
 
 # (run once) Create the cold (=random init) instances of the models
 mca = MakeColdAutoencoders(dir_cold_models = cold_dir)
@@ -49,8 +49,8 @@ at.make_data_augment_examples().show()
 at.train_autoencoder(n_epochs = 3, batch_size_tr = 8, batch_size_te = 32, devel = True)
 
 # EvaluateReconstruction
-er = EvaluateReconstruction(device = device)
+er = EvaluateReconstruction(dir_hot_models = hot_dir, device = device)
 er.evaluate_reconstruction_on_examples(
-    path_images = "D:/xc_real_projects/xc_corvus_corax/xc_spectrograms", 
-    time_stamp_model = "20250624_111856", n_images = 64, shuffle = False).show()
+    path_images = dat_tes_dir, 
+    time_stamp_model = "20250630_095044", n_images = 64, shuffle = False).show()
 

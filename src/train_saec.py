@@ -1,6 +1,6 @@
 #--------------------------------
 # Author : Serge Zaugg
-# Description : small helper functions and bigger ML processes are wrapped into functions/classes here
+# Description : ML processes are wrapped into functions/classes here
 #--------------------------------
 
 import os 
@@ -10,7 +10,6 @@ import pandas as pd
 import datetime
 from PIL import Image
 import json
-# import yaml
 import plotly.express as px
 from plotly.subplots import make_subplots
 import torch
