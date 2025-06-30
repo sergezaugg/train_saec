@@ -6,6 +6,8 @@
 import gc
 import torch
 import plotly
+import os
+import glob
 try:
     from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 except:
@@ -73,5 +75,12 @@ def test_fig_data_augment():
 def test_fig_reconstruction():
     assert isinstance(fig_reconst, plotly.graph_objs._figure.Figure)
 
-
-
+#----------------------------------------------
+# clean-up : Find and Delete all .pth and .pkl files 
+npz_files1 = glob.glob(os.path.join(cold_dir, '*.pth'))
+npz_files2 = glob.glob(os.path.join(hot_dir, '*.pth'))
+pkl_files1 = glob.glob(os.path.join(hot_dir, '*.pkl'))
+files_to_remove = npz_files1 + npz_files2 + pkl_files1
+len(files_to_remove)
+for file_path in files_to_remove:
+    os.remove(file_path)
