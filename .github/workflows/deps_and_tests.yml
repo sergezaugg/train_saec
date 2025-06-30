@@ -1,4 +1,4 @@
-name: deps_and_tests
+name: install_deps_and_tests
 
 on:
   pull_request:
