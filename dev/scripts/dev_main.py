@@ -1,6 +1,6 @@
 #--------------------------------
 # Author : Serge Zaugg
-# Description : Train spectrogram auto-encoders
+# Description : dev script for interactive use 
 #--------------------------------
 
 import torch
