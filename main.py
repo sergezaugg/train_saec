@@ -3,8 +3,12 @@
 # Description : Train spectrogram auto-encoders
 #--------------------------------
 
+# pip install dist\train_saec-0.0.1-py3-none-any.whl
+# pip uninstall train_saec
+
 import torch
-from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+from train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+# from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 

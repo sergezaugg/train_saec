@@ -1,0 +1,24 @@
+# Build setup to make package with single module 
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "train_saec"
+version = "0.0.1"
+description = "A package for training and evaluating autoencoders for spectrogram images."
+readme = "readme.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{ name="Serge Zaugg"}]
+dependencies = [
+    "pandas>=2.2.3",
+    "pillow>=11.1.0",
+    "plotly>=6.1.2",
+    "PyYAML>=6.0.2",
+    "torchinfo>=1.8.0",
+    ]
+
+[tool.hatch.build]
+sources = ["src"]
