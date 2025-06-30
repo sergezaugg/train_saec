@@ -4,6 +4,7 @@
 #--------------------------------
 
 import os 
+# import sys
 import pickle
 import numpy as np
 import pandas as pd
@@ -19,6 +20,16 @@ from torchvision.transforms.functional import pil_to_tensor
 import torchvision.transforms.v2 as transforms
 import torch.optim as optim
 from torchinfo import summary
+
+
+try:
+    import src.model_collection.model_collection as allmodels
+    print("imported from src/")
+except:
+    import model_collection.model_collection as allmodels
+    print("imported from ./")
+
+
 
 class MakeColdAutoencoders:
     """
@@ -50,8 +61,10 @@ class MakeColdAutoencoders:
         # primary models 
 
         # Gen B REFERENCE model 
-        from model_collection.model_collection import EncoderGenBTP32 as Encoder
-        from model_collection.model_collection import DecoderGenBTP32 as Decoder
+        # from src.model_collection.model_collection import EncoderGenBTP32 as Encoder
+        # from src.model_collection.model_collection import DecoderGenBTP32 as Decoder      
+        Encoder = allmodels.EncoderGenBTP32
+        Decoder = allmodels.DecoderGenBTP32
         save_file_name = "GenBTP32_CH0256"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
@@ -62,8 +75,10 @@ class MakeColdAutoencoders:
         torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         # NEW GEn C - without transpose conv
-        from model_collection.model_collection import EncoderGenCTP32 as Encoder
-        from model_collection.model_collection import DecoderGenCTP32 as Decoder
+        # from src.model_collection.model_collection import EncoderGenCTP32 as Encoder
+        # from src.model_collection.model_collection import DecoderGenCTP32 as Decoder
+        Encoder = allmodels.EncoderGenCTP32
+        Decoder = allmodels.DecoderGenCTP32
         save_file_name = "GenC_new_TP32_CH0256"
         model_enc = Encoder(n_ch_in = 3, n_ch_out = 256, ch = [64, 128, 128, 128])
         model_dec = Decoder(n_ch_in = 256, n_ch_out = 3, ch = [128, 128, 128, 64])
@@ -74,8 +89,11 @@ class MakeColdAutoencoders:
         torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         # model with only 3 convolutional blocks (better reconstruction but small receptive field)
-        from model_collection.model_collection import EncoderGenB3blocks as Encoder
-        from model_collection.model_collection import DecoderGenB3blocks as Decoder
+        # from src.model_collection.model_collection import EncoderGenB3blocks as Encoder
+        # from src.model_collection.model_collection import DecoderGenB3blocks as Decoder
+        Encoder = allmodels.EncoderGenB3blocks
+        Decoder = allmodels.DecoderGenB3blocks
+
         save_file_name = "GenB3blocks"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 64])
@@ -87,8 +105,10 @@ class MakeColdAutoencoders:
 
         #--------------------------------
         # variants of Gen B models 
-        from model_collection.model_collection import EncoderGenBTP32 as Encoder
-        from model_collection.model_collection import DecoderGenBTP32 as Decoder
+        # from src.model_collection.model_collection import EncoderGenBTP32 as Encoder
+        # from src.model_collection.model_collection import DecoderGenBTP32 as Decoder
+        Encoder = allmodels.EncoderGenBTP32
+        Decoder = allmodels.DecoderGenBTP32
         save_file_name = "GenBTP32_CH0512"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256, 512])
         model_dec = Decoder(n_ch_out = 3, ch = [512, 256, 128, 128, 64])
@@ -98,8 +118,10 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        from model_collection.model_collection import EncoderGenBTP16 as Encoder
-        from model_collection.model_collection import DecoderGenBTP16 as Decoder
+        # from src.model_collection.model_collection import EncoderGenBTP16 as Encoder
+        # from src.model_collection.model_collection import DecoderGenBTP16 as Decoder
+        Encoder = allmodels.EncoderGenBTP16
+        Decoder = allmodels.DecoderGenBTP16
         save_file_name = "GenBTP16_CH0256"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
@@ -109,8 +131,10 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        from model_collection.model_collection import EncoderGenBTP08 as Encoder
-        from model_collection.model_collection import DecoderGenBTP08 as Decoder
+        # from src.model_collection.model_collection import EncoderGenBTP08 as Encoder
+        # from src.model_collection.model_collection import DecoderGenBTP08 as Decoder
+        Encoder = allmodels.EncoderGenBTP08
+        Decoder = allmodels.DecoderGenBTP08
         save_file_name = "GenBTP08_CH0256"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
@@ -236,7 +260,7 @@ class AutoencoderTrain:
         self.hot_start = hot_start
         self.model_tag = model_tag
 
-        with open(os.path.join('./data_gen_presets', data_gen + '.json')) as f:
+        with open(os.path.join('./src/data_gen_presets', data_gen + '.json')) as f:
             sess_info = json.load(f)
         self.sess_info = sess_info    
         self.train_dataset = SpectroImageDataset(self.dir_train_data, par = self.sess_info['data_generator'], augment_1 = True, denoise_1 = False, augment_2 = False, denoise_2 = True)
@@ -346,7 +370,7 @@ class AutoencoderTrain:
             _ = self.model_dec.train()
             trai_perf_li = []
             for batch_tr, (da_tr_1, da_tr_2, fi) in enumerate(train_loader, 0):
-                if devel and batch_tr > 4:
+                if devel and batch_tr > 1:
                     break
                 da_tr_1 = da_tr_1.to(self.device)
                 da_tr_2 = da_tr_2.to(self.device)
@@ -365,7 +389,7 @@ class AutoencoderTrain:
                 optimizer.step()
                 # feedback every 10th batch
                 if batch_tr % 10 == 0:
-                    print('loss', np.round(loss.item(),5), " --- "  + str(batch_tr) + " out of " + str(n_batches_tr) + " batches")
+                    print('TRAINING loss', np.round(loss.item(),5), " --- "  + str(batch_tr+1) + " out of " + str(n_batches_tr) + " batches")
                     print(decoded.cpu().detach().numpy().min().round(3) , decoded.cpu().detach().numpy().max().round(3) )
                     print("-")
             mse_trai_li.append(np.array(trai_perf_li).mean())        
@@ -376,8 +400,12 @@ class AutoencoderTrain:
             _ = self.model_dec.eval()
             with torch.no_grad():
                 test_perf_li = []
-                for btchi, (da_te_1, da_te_2, fi) in enumerate(test_loader, 0):
-                    if btchi > 10: break # 100
+                for batch_te, (da_te_1, da_te_2, fi) in enumerate(test_loader, 0):
+                    # quick-fix
+                    if devel and batch_te > 1:
+                        break
+                    if batch_te > 10: 
+                        break 
                     da_te_1 = da_te_1.to(self.device)
                     da_te_2 = da_te_2.to(self.device)
                     # forward 
@@ -388,8 +416,8 @@ class AutoencoderTrain:
                     loss_test = criterion(decoded, da_te_2)
                     test_perf_li.append(loss_test.cpu().detach().numpy().item())
                     # feedback every 10th batch
-                    if btchi % 10 == 0:
-                        print('TEST loss', np.round(loss_test.item(),5), " --- "  + str(btchi) + " out of " + str(n_batches_te) + " batches")
+                    if batch_te % 10 == 0:
+                        print('TEST loss', np.round(loss_test.item(),5), " --- "  + str(batch_te+1) + " out of " + str(n_batches_te) + " batches")
                 mse_test_li.append(np.array(test_perf_li).mean())
             
             # reshape performance metrics to a neat lil df
@@ -420,7 +448,13 @@ class AutoencoderTrain:
             model_enc_scripted.save(os.path.join(self.dir_hot_models, model_save_name))   
             model_save_name = tstmp + "_decoder_script_" + self.sess_info['model_gen'] + epoch_tag + ".pth"
             model_dec_scripted = torch.jit.script(self.model_dec) # Export to TorchScript
-            model_dec_scripted.save(os.path.join(self.dir_hot_models, model_save_name))   
+            model_dec_scripted.save(os.path.join(self.dir_hot_models, model_save_name)) 
+        # temporary - this a quick fix to implement tests     
+        return(mse_test_li, mse_trai_li)     
+
+
+
+
 
 
 class EvaluateReconstruction:
