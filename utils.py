@@ -220,14 +220,13 @@ class AutoencoderTrain:
         Epoch to resume from (for hot start).
     """
   
-    def __init__(self, dir_cold_models, dir_hot_models, dir_train_data, dir_test_data, hot_start, model_tag, sess_json, device):
+    def __init__(self, dir_cold_models, dir_hot_models, dir_train_data, dir_test_data, hot_start, model_tag, data_gen, device):
         """
         Initialize session, datasets, models, and config.
 
         Parameters
         ----------
-        sess_json : str
-            Name of session config JSON in ./session_params/training.
+       
         device : str or torch.device
             Device for model training ("cpu" or "cuda").
         """
@@ -238,7 +237,7 @@ class AutoencoderTrain:
         self.hot_start = hot_start
         self.model_tag = model_tag
 
-        with open(os.path.join('./session_params/training', sess_json )) as f:
+        with open(os.path.join('./data_gen_presets', data_gen + '.json')) as f:
             sess_info = json.load(f)
         self.sess_info = sess_info    
         self.train_dataset = SpectroImageDataset(self.dir_train_data, par = self.sess_info['data_generator'], augment_1 = True, denoise_1 = False, augment_2 = False, denoise_2 = True)
@@ -311,7 +310,7 @@ class AutoencoderTrain:
         return(fig)
     
 
-    def train_autoencoder(self, devel = False):
+    def train_autoencoder(self, n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = False):
         """
         Train autoencoder, evaluate on test data, save models and training metadata.
 
@@ -326,22 +325,22 @@ class AutoencoderTrain:
         """
 
         # train 
-        train_loader  = torch.utils.data.DataLoader(self.train_dataset, batch_size=self.sess_info['batch_size_tr'],  shuffle=True, drop_last=True)
-        test_loader   = torch.utils.data.DataLoader(self.test_dataset, batch_size=self.sess_info['batch_size_te'],  shuffle=True, drop_last=True)
+        train_loader  = torch.utils.data.DataLoader(self.train_dataset, batch_size=batch_size_tr,  shuffle=True, drop_last=True)
+        test_loader   = torch.utils.data.DataLoader(self.test_dataset, batch_size=batch_size_te,  shuffle=True, drop_last=True)
 
         # instantiate loss and optimizer
         criterion = nn.MSELoss() #nn.BCELoss()
         optimizer = optim.Adam(list(self.model_enc.parameters()) + list(self.model_dec.parameters()), lr=0.001)
         # optimizer = optim.SGD(list(self.model_enc.parameters()) + list(self.model_dec.parameters()), lr=0.01, momentum=0.9)
 
-        n_batches_tr = self.train_dataset.__len__() // self.sess_info['batch_size_tr']
-        n_batches_te = self.test_dataset.__len__() // self.sess_info['batch_size_te']
+        n_batches_tr = self.train_dataset.__len__() // batch_size_tr
+        n_batches_te = self.test_dataset.__len__() // batch_size_te
 
         mse_test_li = []
         mse_trai_li = []
-        for i, epoch in enumerate(range(self.epoch_restart_value, self.epoch_restart_value + self.sess_info['n_epochs'])):
+        for i, epoch in enumerate(range(self.epoch_restart_value, self.epoch_restart_value + n_epochs)):
             print('Epoch (full trainig history): ', epoch +1)
-            print(f"Epoch (current training run): {i + 1}/{self.sess_info['n_epochs']}")
+            print(f"Epoch (current training run): {i + 1}/{n_epochs}")
             #----------------
             # Train the model 
             _ = self.model_enc.train()

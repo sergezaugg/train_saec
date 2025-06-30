@@ -19,7 +19,11 @@ mca = MakeColdAutoencoders(dir_cold_models = cold_dir)
 mod_arch = mca.make()
 
 # Either, initialize a AEC-trainer with a naive model 
-at = AutoencoderTrain(sess_json = 'sess_01_randinit.json', 
+at = AutoencoderTrain(
+                    #   data_gen = 'baseline', 
+                    #   data_gen = 'daugm_denoise', 
+                    #   data_gen = 'daugm_only', 
+                      data_gen = 'denoise_only', 
                       dir_cold_models = cold_dir, 
                       dir_hot_models = hot_dir,
                       dir_train_data = dat_tra_dir, 
@@ -29,9 +33,8 @@ at = AutoencoderTrain(sess_json = 'sess_01_randinit.json',
                       device = device
                       )
 
-
 # Or, initialize a AEC-trainer with a pre-trained model
-at = AutoencoderTrain(sess_json = 'sess_02_resume.json', 
+at = AutoencoderTrain(data_gen = 'daugm_denoise', 
                       dir_cold_models = cold_dir, 
                       dir_hot_models = hot_dir,
                       dir_train_data = dat_tra_dir, 
@@ -40,13 +43,10 @@ at = AutoencoderTrain(sess_json = 'sess_02_resume.json',
                       model_tag = "20250630_095044", 
                       device = device)
 
-
-
-
 # Directly check data augmentation
 at.make_data_augment_examples().show()
 # Start training (.pth files will be saved to disk)
-at.train_autoencoder(devel = True)
+at.train_autoencoder(n_epochs = 3, batch_size_tr = 8, batch_size_te = 32, devel = True)
 
 # EvaluateReconstruction
 er = EvaluateReconstruction(device = device)

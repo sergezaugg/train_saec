@@ -1,7 +1,4 @@
  {
-"batch_size_tr" : 8,  
-"batch_size_te" : 32,
-"n_epochs" : 1,
 "data_generator" : {
     "da": {
         "rot_deg"    : 0.25,  
@@ -12,8 +9,8 @@
         "gnoiseprob" : 0.50
         },
     "den": {  
-        "thld_lo" :  0.30,
-        "thld_up" :  0.50
+        "thld_lo" :  0.00,
+        "thld_up" :  0.01
         } 
     }
 }
