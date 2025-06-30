@@ -275,10 +275,10 @@ class AutoencoderTrain:
         # hack to be able to run this function in dev mode (interactive) and also when called from within a package
         try: # for packaged module 
             path_json = "data_gen_presets"
-            # files(path_json)
+            files(path_json) # needed becaus it triggers error and forwards to except 
         except: # for dev
             path_json = "src.data_gen_presets"
-            # files(path_json)
+            files(path_json)
 
         with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)
