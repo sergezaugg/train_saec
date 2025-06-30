@@ -2,5 +2,5 @@ __pycache__/
 *.npz
 *.pth
 *.pt
-
+*.pkl
 
