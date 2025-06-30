@@ -8,8 +8,8 @@ from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateRecon
 torch.cuda.is_available()
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-cold_dir = "D:/xc_real_projects/pytorch_cold_models"
-hot_dir = "D:/xc_real_projects/pytorch_hot_models"
+cold_dir = "dev/outp/cold_models"
+hot_dir = "dev/outp/hot_models"
 
 dat_tra_dir = "dev/data/train/images"
 dat_tes_dir = "dev/data/test/images" 
