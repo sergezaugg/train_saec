@@ -1,0 +1,16 @@
+ {
+"data_generator" : {
+    "da": {
+        "rot_deg"    : 0.00,  
+        "trans_prop" : 0.00, 
+        "brightness" : 0.00,  
+        "contrast"   : 0.00,  
+        "gnoisesigm" : 0.00,  
+        "gnoiseprob" : 0.00
+        },
+    "den": {  
+        "thld_lo" :  0.00,
+        "thld_up" :  0.01
+        } 
+    }
+}
