@@ -20,10 +20,10 @@ mod_arch = mca.make()
 
 # Either, initialize a AEC-trainer with a naive model 
 at = AutoencoderTrain(
-                    #   data_gen = 'baseline', 
+                      data_gen = 'baseline', 
                     #   data_gen = 'daugm_denoise', 
                     #   data_gen = 'daugm_only', 
-                      data_gen = 'denoise_only', 
+                      # data_gen = 'denoise_only', 
                       dir_cold_models = cold_dir, 
                       dir_hot_models = hot_dir,
                       dir_train_data = dat_tra_dir, 
@@ -40,7 +40,7 @@ at = AutoencoderTrain(data_gen = 'daugm_denoise',
                       dir_train_data = dat_tra_dir, 
                       dir_test_data = dat_tes_dir,
                       hot_start = True, 
-                      model_tag = "20250630_095044", 
+                      model_tag = "20250630_111557", 
                       device = device)
 
 # Directly check data augmentation
@@ -52,5 +52,5 @@ at.train_autoencoder(n_epochs = 3, batch_size_tr = 8, batch_size_te = 32, devel 
 er = EvaluateReconstruction(dir_hot_models = hot_dir, device = device)
 er.evaluate_reconstruction_on_examples(
     path_images = dat_tes_dir, 
-    time_stamp_model = "20250630_095044", n_images = 64, shuffle = False).show()
+    time_stamp_model = "20250630_111557", n_images = 64, shuffle = False).show()
 
