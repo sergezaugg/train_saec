@@ -4,8 +4,8 @@ on:
   pull_request:
     branches: [ "main" ] # .... 
   workflow_dispatch:
-  push:  
-    branches: [ "feat" ] # temp 
+  # push:  
+  #   branches: [ "feat" ] # temp 
 
 jobs:
   basic_ci:

@@ -450,7 +450,7 @@ class AutoencoderTrain:
             model_dec_scripted = torch.jit.script(self.model_dec) # Export to TorchScript
             model_dec_scripted.save(os.path.join(self.dir_hot_models, model_save_name)) 
         # temporary - this a quick fix to implement tests     
-        return(mse_test_li, mse_trai_li)     
+        return(mse_test_li, mse_trai_li, tstmp)     
 
 
 
