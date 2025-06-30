@@ -21,6 +21,8 @@ import torchvision.transforms.v2 as transforms
 import torch.optim as optim
 from torchinfo import summary
 
+from importlib.resources import files
+
 
 try:
     import src.model_collection.model_collection as allmodels
@@ -260,8 +262,31 @@ class AutoencoderTrain:
         self.hot_start = hot_start
         self.model_tag = model_tag
 
-        with open(os.path.join('./src/data_gen_presets', data_gen + '.json')) as f:
+
+        # try:
+        #     with open(os.path.join('./src/data_gen_presets', data_gen + '.json')) as f:
+        #         sess_info = json.load(f)
+        # except:
+        #     with open(os.path.join('./data_gen_presets', data_gen + '.json')) as f:
+        #         sess_info = json.load(f)
+
+        # new - ok works 
+     
+        # hack to be able to run this function in dev mode (interactive) and also when called from within a package
+        try: # for packaged module 
+            path_json = "data_gen_presets"
+            # files(path_json)
+        except: # for dev
+            path_json = "src.data_gen_presets"
+            # files(path_json)
+
+        with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)
+
+
+
+
+
         self.sess_info = sess_info    
         self.train_dataset = SpectroImageDataset(self.dir_train_data, par = self.sess_info['data_generator'], augment_1 = True, denoise_1 = False, augment_2 = False, denoise_2 = True)
         self.test_dataset  = SpectroImageDataset(self.dir_test_data,  par = self.sess_info['data_generator'], augment_1 = False, denoise_1 = False, augment_2 = False, denoise_2 = True)

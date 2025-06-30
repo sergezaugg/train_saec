@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "train_saec"
-version = "0.0.1"
+version = "0.0.5"
 description = "A package for training and evaluating autoencoders for spectrogram images."
 readme = "readme.md"
 requires-python = ">=3.11"
@@ -22,3 +22,16 @@ dependencies = [
 
 [tool.hatch.build]
 sources = ["src"]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "train_saec.py", 
+    "model_collection",
+    "model_collection/model_collection.py",
+    "data_gen_presets/*.json"
+    ]
+
+
+
+
+
