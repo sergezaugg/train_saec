@@ -15,10 +15,6 @@
 * ```pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126``` (for Windows with CUDA 12.6)
 * If other CUDA version or other OS, check official instructions [here](https://pytorch.org/get-started/locally)
 
-### Configuration
-* Paths where models will be saved and fetched are defined in **config/config.yaml**
-* Parameters for multiple training sessions can be defined as json file in **./session_params/training**
-
 ### Usage 
 * Prepare PNG formatted color images of spectrograms, e.g. with [this tool](https://github.com/sergezaugg/xeno_canto_organizer)
 * [main.py](main.py) illustrates a pipeline to create and train auto-encoders
