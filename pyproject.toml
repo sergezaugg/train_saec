@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "train_saec"
-version = "0.0.8"
+version = "0.1.0"
 description = "A package for training and auto-encoders for spectrogram images."
 readme = "README.md"
 requires-python = ">=3.11"
