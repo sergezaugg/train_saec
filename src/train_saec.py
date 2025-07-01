@@ -26,10 +26,10 @@ from importlib.resources import files
 
 try:
     import src.model_collection.model_collection as allmodels
-    print("imported from src/")
+    print("imported model_collection from src/")
 except:
     import model_collection.model_collection as allmodels
-    print("imported from ./")
+    print("imported model_collection from ./")
 
 
 
@@ -266,9 +266,11 @@ class AutoencoderTrain:
         try: # for packaged module (only sees inside src/)
             path_json = "data_gen_presets"
             files(path_json) # needed because it triggers error and forwards to except 
+            print('imported from data_gen_presets')
         except: # for dev (based on repo dir structure)
             path_json = "src.data_gen_presets"
             files(path_json)
+            print('imported from src.data_gen_presets')
         # load json 
         with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)
