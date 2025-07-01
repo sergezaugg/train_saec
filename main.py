@@ -7,8 +7,11 @@
 # pip uninstall train_saec
 
 import torch
-from train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
-# from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+
+
+# from train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+
+from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
