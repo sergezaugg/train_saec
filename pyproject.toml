@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "train_saec"
+version = "0.0.8"
+description = "A package for training and auto-encoders for spectrogram images."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{ name="Serge Zaugg" }]
+dependencies = [
+    "pandas>=2.2.3",
+    "pillow>=11.1.0",
+    "plotly>=6.1.2",
+    "PyYAML>=6.0.2",
+    "torchinfo>=1.8.0",
+    ]
+
+[tool.hatch.build.targets.wheel]
+ignore-vcs = true
+only-include = ["train_saec"]
+include = [
+    "tools.py", 
+    "model_collection",
+    "model_collection/model_collection.py",
+    "data_gen_presets/*.json"
+    ]
+exclude = [
+    "test_01.py"
+    ]
+
+
+
+
