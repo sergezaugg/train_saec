@@ -9,7 +9,7 @@ description = "A package for training and auto-encoders for spectrogram images."
 readme = "readme.md"
 requires-python = ">=3.11"
 license = {text = "MIT"}
-authors = [{ name="Serge Zaugg"}]
+authors = [{ name="Serge Zaugg" }]
 dependencies = [
     "pandas>=2.2.3",
     "pillow>=11.1.0",

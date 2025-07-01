@@ -22,12 +22,11 @@ from torchinfo import summary
 from importlib.resources import files
 
 
-try:
-    import train_saec.model_collection.model_collection as allmodels
-    print("try")
-except:
-    import model_collection.model_collection as allmodels
-    print("except")
+# try:
+import train_saec.model_collection.model_collection as allmodels
+# except:
+#     import model_collection.model_collection as allmodels
+#     print("except")
 
 
 
@@ -248,14 +247,13 @@ class AutoencoderTrain:
 
         # get data augmentation params  
         # hack to be able to run this function in dev mode (interactive) and also when called from within a package
-        try: 
-            path_json = "train_saec.data_gen_presets"
-            files(path_json) # needed because it triggers error and forwards to except 
-            print('try')
-        except: 
-            path_json = "data_gen_presets"
-            files(path_json) # needed because it triggers error and forwards to except 
-            print('except')
+        # try: 
+        path_json = "train_saec.data_gen_presets"
+        # files(path_json) # needed because it triggers error and forwards to except 
+        # except: 
+        #     path_json = "data_gen_presets"
+        #     files(path_json) # needed because it triggers error and forwards to except 
+        #     print('except')
     
         
         
