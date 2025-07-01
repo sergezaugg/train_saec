@@ -8,10 +8,8 @@ import torch
 import plotly
 import os
 import glob
-try:
-    from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
-except:
-    from train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
+
+from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 cold_dir = "dev/outp/cold_models"
