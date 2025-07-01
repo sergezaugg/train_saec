@@ -248,10 +248,8 @@ class AutoencoderTrain:
     def __init__(self, dir_cold_models, dir_hot_models, dir_train_data, dir_test_data, hot_start, model_tag, data_gen, device):
         """
         Initialize session, datasets, models, and config.
-
         Parameters
         ----------
-       
         device : str or torch.device
             Device for model training ("cpu" or "cuda").
         """
@@ -261,36 +259,22 @@ class AutoencoderTrain:
         self.dir_test_data  = dir_test_data
         self.hot_start = hot_start
         self.model_tag = model_tag
+        self.device = device
 
-
-        # try:
-        #     with open(os.path.join('./src/data_gen_presets', data_gen + '.json')) as f:
-        #         sess_info = json.load(f)
-        # except:
-        #     with open(os.path.join('./data_gen_presets', data_gen + '.json')) as f:
-        #         sess_info = json.load(f)
-
-        # new - ok works 
-     
+        # get data augmentation params  
         # hack to be able to run this function in dev mode (interactive) and also when called from within a package
-        try: # for packaged module 
+        try: # for packaged module (only sees inside src/)
             path_json = "data_gen_presets"
-            files(path_json) # needed becaus it triggers error and forwards to except 
-        except: # for dev
+            files(path_json) # needed because it triggers error and forwards to except 
+        except: # for dev (based on repo dir structure)
             path_json = "src.data_gen_presets"
             files(path_json)
-
+        # load json 
         with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)
-
-
-
-
-
         self.sess_info = sess_info    
         self.train_dataset = SpectroImageDataset(self.dir_train_data, par = self.sess_info['data_generator'], augment_1 = True, denoise_1 = False, augment_2 = False, denoise_2 = True)
         self.test_dataset  = SpectroImageDataset(self.dir_test_data,  par = self.sess_info['data_generator'], augment_1 = False, denoise_1 = False, augment_2 = False, denoise_2 = True)
-        self.device = device
         
         if self.hot_start == False:
             tstmp_0 = self.model_tag
@@ -361,12 +345,10 @@ class AutoencoderTrain:
     def train_autoencoder(self, n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = False):
         """
         Train autoencoder, evaluate on test data, save models and training metadata.
-
         Parameters
         ----------
         devel : bool
             If True, runs fewer batches per epoch for debugging.
-
         Returns
         -------
         None

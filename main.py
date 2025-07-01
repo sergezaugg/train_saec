@@ -10,9 +10,6 @@ import torch
 from train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 # from src.train_saec import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
-
-
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 cold_dir = "dev/outp/cold_models"
@@ -29,6 +26,10 @@ at = AutoencoderTrain(data_gen = 'daugm_denoise', dir_cold_models = cold_dir, di
 						dir_train_data = dat_tra_dir, dir_test_data = dat_tes_dir,
 						hot_start = False, model_tag = "GenBTP16_CH0256", device = device
 						)
+
+
+at.sess_info
+
 
 # Directly check data augmentation
 at.make_data_augment_examples().show()
