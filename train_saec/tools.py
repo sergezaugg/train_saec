@@ -24,10 +24,10 @@ from importlib.resources import files
 
 try:
     import train_saec.model_collection.model_collection as allmodels
-    print("imported model_collection from src/")
+    print("try")
 except:
     import model_collection.model_collection as allmodels
-    print("imported model_collection from ./")
+    print("except")
 
 
 
@@ -249,13 +249,14 @@ class AutoencoderTrain:
         # get data augmentation params  
         # hack to be able to run this function in dev mode (interactive) and also when called from within a package
         try: 
+            path_json = "train_saec.data_gen_presets"
+            files(path_json) # needed because it triggers error and forwards to except 
+            print('try')
+        except: 
             path_json = "data_gen_presets"
             files(path_json) # needed because it triggers error and forwards to except 
-            print('imported from data_gen_presets')
-        except: 
-            path_json = "src.data_gen_presets"
-            files(path_json)
-            print('imported from src.data_gen_presets')
+            print('except')
+    
         
         
         # load json 
