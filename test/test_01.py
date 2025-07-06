@@ -20,7 +20,7 @@ dat_tes_dir = "dev/data/test/images"
 #----------------------------------------------
 # create objects to be tested
 
-mca = MakeColdAutoencoders(dir_cold_models = cold_dir)
+mca = MakeColdAutoencoders(dir_models = cold_dir)
 mod_arch = mca.make()
 
 at01 = AutoencoderTrain(cold_dir, hot_dir, dat_tra_dir, dat_tes_dir, False, "GenBTP32_CH0256", 'baseline', device)
@@ -41,7 +41,7 @@ li031, li032, tstmp03 = at03.train_autoencoder(n_epochs = 1, batch_size_tr = 3, 
 del(at03)
 gc.collect()
 
-er = EvaluateReconstruction(dir_hot_models = hot_dir, device = device)
+er = EvaluateReconstruction(dir_models = hot_dir, device = device)
 fig_reconst = er.evaluate_reconstruction_on_examples(dat_tes_dir, tstmp03, n_images = 8, shuffle = False)
 
 #----------------------------------------------
