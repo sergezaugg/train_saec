@@ -3,11 +3,21 @@
 # Description : Train spectrogram auto-encoders
 #--------------------------------
 
-# pip install dist\train_saec-0.0.1-py3-none-any.whl
+# pip install dist\train_saec-0.1.1-py3-none-any.whl
 # pip uninstall train_saec
 
-import torch
 
+# dirty hack proposed by GPT to make sure pkg is imported from installed package
+import sys
+sys.path = [p for p in sys.path if p not in ("", ".")]
+# check where from pkg was imported
+import train_saec
+pkg_import_source = train_saec.__file__
+print(pkg_import_source)
+
+
+
+import torch
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

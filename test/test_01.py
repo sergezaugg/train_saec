@@ -9,6 +9,12 @@ import plotly
 import os
 import glob
 
+# check where from pkg was imported
+import train_saec
+pkg_import_source = train_saec.__file__
+print(pkg_import_source)
+
+
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -45,6 +51,10 @@ fig_reconst = er.evaluate_reconstruction_on_examples(dat_tes_dir, tstmp03, n_ima
 
 #----------------------------------------------
 # perform the tests
+
+# not really a test, this will print the pkg_import_source with $ pytest -s
+def test_import_location():    
+    print('-->> pkg_import_source: ' , pkg_import_source)
 
 def test_MakeColdAutoencoders_001():
     assert isinstance(mca, MakeColdAutoencoders)
