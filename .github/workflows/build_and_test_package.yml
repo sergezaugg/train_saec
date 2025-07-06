@@ -55,5 +55,5 @@ jobs:
       - name: Run tests 
         run: |
           pytest -s
-
+        working-directory: test
 
