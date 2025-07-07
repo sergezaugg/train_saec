@@ -21,19 +21,17 @@ dependencies = [
 [tool.hatch.build.targets.wheel]
 ignore-vcs = true
 
-# only-include = ["src/train_saec"]
-
 sources = ["src"]
 
 include = [
     "tools.py", 
     "model_collection",
     "model_collection/model_collection.py",
-    "data_gen_presets/*.json"
+    # "data_gen_presets/*.json"
+    "src/train_saec/data_gen_presets/*"
     ]
     
-#exclude = [
-#   "test_01.py"
-#    ]
-
-
+#------------------------------------------------
+#[tool.hatch.build.targets.wheel]
+#packages = ["src/train_saec"]
+#include = ["src/train_saec/data_gen_presets/*"]

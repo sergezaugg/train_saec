@@ -1,6 +1,10 @@
 #--------------------------------
 # Author : Serge Zaugg
 # Description : Testing for CI - basic tests to check if process runs through, nothing more !
+# mini-cheat-sheet
+# install build:        pip install --upgrade dist\train_saec-0.1.3-py3-none-any.whl
+# to work in dev        pip install --upgrade -e .
+#                       pip uninstall train_saec
 #--------------------------------
 
 import gc
@@ -13,7 +17,6 @@ import glob
 import train_saec.tools
 pkg_import_source = train_saec.tools.__file__
 print(pkg_import_source)
-
 
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 

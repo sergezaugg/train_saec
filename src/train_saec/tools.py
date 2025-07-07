@@ -21,14 +21,25 @@ import torch.optim as optim
 from torchinfo import summary
 from importlib.resources import files
 
-
-print("cangouru")
-
-# try:
 import train_saec.model_collection.model_collection as allmodels
-# except:
-#     import src.train_saec.model_collection.model_collection as allmodels
-#     print("except")
+
+print("elephant")
+
+
+
+path_json = "train_saec.data_gen_presets"
+files(path_json) # needed because it triggers error and forwards to except     
+# load json 
+print('files(path_json)', files(path_json))
+# with files(path_json).joinpath('denoise_only' + '.json').open("r") as f:
+#     sess_info = json.load(f)
+# print(sess_info)
+
+
+
+
+
+
 
 
 
@@ -246,18 +257,8 @@ class AutoencoderTrain:
         self.model_tag = model_tag
         self.device = device
 
-        # get data augmentation params  
-        # hack to be able to run this function in dev mode (interactive) and also when called from within a package
-        # try: 
         path_json = "train_saec.data_gen_presets"
-        #     files(path_json) # needed because it triggers error and forwards to except 
-        # except: 
-        #     path_json = "src.train_saec.data_gen_presets"
-        #     files(path_json) 
-        #     print('except')
-    
-        
-        
+       
         # load json 
         with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)

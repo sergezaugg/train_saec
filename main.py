@@ -1,11 +1,11 @@
 #--------------------------------
 # Author : Serge Zaugg
 # Description : Train spectrogram auto-encoders
+# mini-cheat-sheet
+# install build:            pip install --upgrade dist\train_saec-0.1.3-py3-none-any.whl
+# to work in dev:           pip install --upgrade -e .
+# conf no-direct-imports:   pip uninstall train_saec
 #--------------------------------
-
-# pip install dist\train_saec-0.1.3-py3-none-any.whl
-# pip install -e .
-# pip uninstall train_saec
 
 # check where from pkg was imported
 import train_saec.tools
@@ -14,7 +14,6 @@ print(pkg_import_source)
 
 import torch
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
-
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
