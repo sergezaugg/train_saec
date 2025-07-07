@@ -21,13 +21,12 @@ import torch.optim as optim
 from torchinfo import summary
 from importlib.resources import files
 
-
-# try:
 import train_saec.model_collection.model_collection as allmodels
-# except:
-#     import model_collection.model_collection as allmodels
-#     print("except")
 
+
+print("elephant-lila")
+# path_json = "train_saec.data_gen_presets"
+# print('files(path_json)', files(path_json))
 
 
 class MakeColdAutoencoders:
@@ -38,10 +37,10 @@ class MakeColdAutoencoders:
     them as untrained model files for further use or inspection.
     """
 
-    def __init__(self, dir_cold_models):
+    def __init__(self, dir_models):
         """
         """
-        self.dir_cold_models = dir_cold_models
+        self.dir_models = dir_models
 
     def make(self):
         """
@@ -68,8 +67,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         # NEW GEn C - without transpose conv
         Encoder = allmodels.EncoderGenCTP32
@@ -80,8 +79,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         # model with only 3 convolutional blocks (better reconstruction but small receptive field)
         Encoder = allmodels.EncoderGenB3blocks
@@ -92,8 +91,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 144), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         #--------------------------------
         # variants of Gen B models 
@@ -105,8 +104,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 512, 1, 36), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         Encoder = allmodels.EncoderGenBTP16
         Decoder = allmodels.DecoderGenBTP16
@@ -116,8 +115,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152))
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 72))
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         Encoder = allmodels.EncoderGenBTP08
         Decoder = allmodels.DecoderGenBTP08
@@ -127,8 +126,8 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152))
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 144))
-        torch.save(model_enc, os.path.join(self.dir_cold_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_cold_models, 'cold_decoder_' + save_file_name + '.pth'))
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
         return(arch_di)
 
@@ -229,7 +228,7 @@ class AutoencoderTrain:
         Epoch to resume from (for hot start).
     """
   
-    def __init__(self, dir_cold_models, dir_hot_models, dir_train_data, dir_test_data, hot_start, model_tag, data_gen, device):
+    def __init__(self, dir_models, dir_train_data, dir_test_data, hot_start, model_tag, data_gen, device):
         """
         Initialize session, datasets, models, and config.
         Parameters
@@ -237,26 +236,15 @@ class AutoencoderTrain:
         device : str or torch.device
             Device for model training ("cpu" or "cuda").
         """
-        self.dir_cold_models = dir_cold_models
-        self.dir_hot_models  = dir_hot_models
+        self.dir_models = dir_models
         self.dir_train_data = dir_train_data
         self.dir_test_data  = dir_test_data
         self.hot_start = hot_start
         self.model_tag = model_tag
         self.device = device
 
-        # get data augmentation params  
-        # hack to be able to run this function in dev mode (interactive) and also when called from within a package
-        # try: 
         path_json = "train_saec.data_gen_presets"
-        # files(path_json) # needed because it triggers error and forwards to except 
-        # except: 
-        #     path_json = "data_gen_presets"
-        #     files(path_json) # needed because it triggers error and forwards to except 
-        #     print('except')
-    
-        
-        
+       
         # load json 
         with files(path_json).joinpath(data_gen + '.json').open("r") as f:
             sess_info = json.load(f)
@@ -266,25 +254,25 @@ class AutoencoderTrain:
         
         if self.hot_start == False:
             tstmp_0 = self.model_tag
-            path_enc = [a for a in os.listdir(self.dir_cold_models) if tstmp_0 in a and 'cold_encoder' in a][0]
-            path_dec = [a for a in os.listdir(self.dir_cold_models) if tstmp_0 in a and 'cold_decoder' in a][0]
-            self.model_enc = torch.load(os.path.join(self.dir_cold_models, path_enc), weights_only = False)
-            self.model_dec = torch.load(os.path.join(self.dir_cold_models, path_dec), weights_only = False)
+            path_enc = [a for a in os.listdir(self.dir_models) if tstmp_0 in a and 'cold_encoder' in a][0]
+            path_dec = [a for a in os.listdir(self.dir_models) if tstmp_0 in a and 'cold_decoder' in a][0]
+            self.model_enc = torch.load(os.path.join(self.dir_models, path_enc), weights_only = False)
+            self.model_dec = torch.load(os.path.join(self.dir_models, path_dec), weights_only = False)
             self.model_enc = self.model_enc.to(self.device)
             self.model_dec = self.model_dec.to(self.device)
             sess_info['model_gen'] = self.model_tag
             self.epoch_restart_value = 0
         elif self.hot_start == True:
             tstmp_1 = self.model_tag
-            path_enc = [a for a in os.listdir(self.dir_hot_models) if tstmp_1 in a and 'encoder_model' in a][0]
-            path_dec = [a for a in os.listdir(self.dir_hot_models) if tstmp_1 in a and 'decoder_model' in a][0]
-            self.model_enc = torch.load(os.path.join(self.dir_hot_models, path_enc), weights_only = False)
-            self.model_dec = torch.load(os.path.join(self.dir_hot_models, path_dec), weights_only = False)
+            path_enc = [a for a in os.listdir(self.dir_models) if tstmp_1 in a and 'encoder_model' in a][0]
+            path_dec = [a for a in os.listdir(self.dir_models) if tstmp_1 in a and 'decoder_model' in a][0]
+            self.model_enc = torch.load(os.path.join(self.dir_models, path_enc), weights_only = False)
+            self.model_dec = torch.load(os.path.join(self.dir_models, path_dec), weights_only = False)
             self.model_enc = self.model_enc.to(self.device)
             self.model_dec = self.model_dec.to(self.device) 
             # load info from previous training session 
-            path_sess = [a for a in os.listdir(self.dir_hot_models) if tstmp_1 in a and '_session_info' in a][0]
-            with open(os.path.join(self.dir_hot_models, path_sess), 'rb') as f:
+            path_sess = [a for a in os.listdir(self.dir_models) if tstmp_1 in a and '_session_info' in a][0]
+            with open(os.path.join(self.dir_models, path_sess), 'rb') as f:
                 self.di_origin_sess = pickle.load(f)
             # load model generation 
             sess_info['model_gen'] = self.di_origin_sess['sess_info']['model_gen']
@@ -429,30 +417,30 @@ class AutoencoderTrain:
             epoch_tag = '_epo' + str(epoch +1).zfill(3)
             tstmp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             model_save_name = tstmp + "_encoder_model_" + self.sess_info['model_gen'] + epoch_tag + ".pth"
-            torch.save(self.model_enc, os.path.join(self.dir_hot_models, model_save_name))
+            torch.save(self.model_enc, os.path.join(self.dir_models, model_save_name))
             model_save_name = tstmp + "_decoder_model_" + self.sess_info['model_gen'] + epoch_tag+ ".pth"
-            torch.save(self.model_dec, os.path.join(self.dir_hot_models, model_save_name))
+            torch.save(self.model_dec, os.path.join(self.dir_models, model_save_name))
             # save metadata 
             di_sess = {'df_mse' : df_mse,'sess_info' : self.sess_info, 'epoch' : epoch}
             sess_save_name = tstmp + "_session_info_" + self.sess_info['model_gen'] + epoch_tag + ".pkl"
-            with open(os.path.join(self.dir_hot_models, sess_save_name), 'wb') as f:
+            with open(os.path.join(self.dir_models, sess_save_name), 'wb') as f:
                 pickle.dump(di_sess, f)
             # save TorchScript model for external projects    
             model_save_name = tstmp + "_encoder_script_" + self.sess_info['model_gen'] + epoch_tag + ".pth"
             model_enc_scripted = torch.jit.script(self.model_enc) # Export to TorchScript
-            model_enc_scripted.save(os.path.join(self.dir_hot_models, model_save_name))   
+            model_enc_scripted.save(os.path.join(self.dir_models, model_save_name))   
             model_save_name = tstmp + "_decoder_script_" + self.sess_info['model_gen'] + epoch_tag + ".pth"
             model_dec_scripted = torch.jit.script(self.model_dec) # Export to TorchScript
-            model_dec_scripted.save(os.path.join(self.dir_hot_models, model_save_name)) 
+            model_dec_scripted.save(os.path.join(self.dir_models, model_save_name)) 
         # temporary - this a quick fix to implement tests     
         return(mse_test_li, mse_trai_li, tstmp)     
 
 
 class EvaluateReconstruction:
 
-    def __init__(self, dir_hot_models, device):
+    def __init__(self, dir_models, device):
         self.device = device
-        self.dir_hot_models = dir_hot_models
+        self.dir_models = dir_models
 
     def evaluate_reconstruction_on_examples(self, path_images, time_stamp_model, n_images = 16, shuffle = True):
         """
@@ -476,10 +464,10 @@ class EvaluateReconstruction:
         # ---------------------
         # (2) load models 
         # NEW with TorchScript models 
-        path_enc = [a for a in os.listdir(self.dir_hot_models) if time_stamp_model in a and 'encoder_script' in a][0]
-        path_dec = [a for a in os.listdir(self.dir_hot_models) if time_stamp_model in a and 'decoder_script' in a][0]
-        model_enc = torch.jit.load(os.path.join(self.dir_hot_models, path_enc))
-        model_dec = torch.jit.load(os.path.join(self.dir_hot_models, path_dec))
+        path_enc = [a for a in os.listdir(self.dir_models) if time_stamp_model in a and 'encoder_script' in a][0]
+        path_dec = [a for a in os.listdir(self.dir_models) if time_stamp_model in a and 'decoder_script' in a][0]
+        model_enc = torch.jit.load(os.path.join(self.dir_models, path_enc))
+        model_dec = torch.jit.load(os.path.join(self.dir_models, path_dec))
         model_enc = model_enc.to(self.device)
         model_dec = model_dec.to(self.device)
         _ = model_enc.eval()
