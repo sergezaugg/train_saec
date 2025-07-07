@@ -24,9 +24,9 @@ from importlib.resources import files
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("elephant-rose")
-path_json = "train_saec.data_gen_presets"
-print('files(path_json)', files(path_json))
+print("elephant-lila")
+# path_json = "train_saec.data_gen_presets"
+# print('files(path_json)', files(path_json))
 
 
 class MakeColdAutoencoders:
