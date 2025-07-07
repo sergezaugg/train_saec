@@ -2,7 +2,7 @@
 # Author : Serge Zaugg
 # Description : Train spectrogram auto-encoders
 # mini-cheat-sheet
-# install build:            pip install --upgrade dist\train_saec-0.1.3-py3-none-any.whl
+# install build:            pip install --upgrade dist\train_saec-0.1.4-py3-none-any.whl
 # to work in dev:           pip install --upgrade -e .
 # conf no-direct-imports:   pip uninstall train_saec
 #--------------------------------
