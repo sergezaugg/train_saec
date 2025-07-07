@@ -16,7 +16,6 @@ import glob
 # check where from pkg was imported
 import train_saec.tools
 pkg_import_source = train_saec.tools.__file__
-print(pkg_import_source)
 
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
 

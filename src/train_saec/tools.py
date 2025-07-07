@@ -23,24 +23,10 @@ from importlib.resources import files
 
 import train_saec.model_collection.model_collection as allmodels
 
-print("elephant")
 
-
-
+print("elephant-rose")
 path_json = "train_saec.data_gen_presets"
-files(path_json) # needed because it triggers error and forwards to except     
-# load json 
 print('files(path_json)', files(path_json))
-# with files(path_json).joinpath('denoise_only' + '.json').open("r") as f:
-#     sess_info = json.load(f)
-# print(sess_info)
-
-
-
-
-
-
-
 
 
 class MakeColdAutoencoders:
