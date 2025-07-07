@@ -10,8 +10,8 @@ import os
 import glob
 
 # check where from pkg was imported
-import train_saec
-pkg_import_source = train_saec.__file__
+import train_saec.tools
+pkg_import_source = train_saec.tools.__file__
 print(pkg_import_source)
 
 
