@@ -59,8 +59,8 @@ class MakeColdAutoencoders:
         # primary models 
 
         # Gen B REFERENCE model 
-        Encoder = allmodels.EncoderGenBTP32
-        Decoder = allmodels.DecoderGenBTP32
+        Encoder = allmodels.EncoderGenB_TP32
+        Decoder = allmodels.DecoderGenB_TP32
         save_file_name = "GenBTP32_CH0256"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
@@ -70,9 +70,9 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # NEW GEn C - without transpose conv
-        Encoder = allmodels.EncoderGenCTP32
-        Decoder = allmodels.DecoderGenCTP32
+        # Gen C - without transpose conv
+        Encoder = allmodels.EncoderGenC_TP32
+        Decoder = allmodels.DecoderGenC_TP32
         save_file_name = "GenC_new_TP32_CH0256"
         model_enc = Encoder(n_ch_in = 3, n_ch_out = 256, ch = [64, 128, 128, 128])
         model_dec = Decoder(n_ch_in = 256, n_ch_out = 3, ch = [128, 128, 128, 64])
@@ -82,9 +82,9 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # model with only 3 convolutional blocks (better reconstruction but small receptive field)
-        Encoder = allmodels.EncoderGenB3blocks
-        Decoder = allmodels.DecoderGenB3blocks
+        # Gen D - model with only 3 convolutional blocks (better reconstruction but small receptive field)
+        Encoder = allmodels.EncoderGenD_TP08
+        Decoder = allmodels.DecoderGenD_TP08
         save_file_name = "GenB3blocks"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256])
         model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 64])
@@ -96,8 +96,8 @@ class MakeColdAutoencoders:
 
         #--------------------------------
         # variants of Gen B models 
-        Encoder = allmodels.EncoderGenBTP32
-        Decoder = allmodels.DecoderGenBTP32
+        Encoder = allmodels.EncoderGenB_TP32
+        Decoder = allmodels.DecoderGenB_TP32
         save_file_name = "GenBTP32_CH0512"
         model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256, 512])
         model_dec = Decoder(n_ch_out = 3, ch = [512, 256, 128, 128, 64])
@@ -107,27 +107,9 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        Encoder = allmodels.EncoderGenBTP16
-        Decoder = allmodels.DecoderGenBTP16
-        save_file_name = "GenBTP16_CH0256"
-        model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
-        model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
-        arch_di[save_file_name] = {}
-        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152))
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 72))
-        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
+       
 
-        Encoder = allmodels.EncoderGenBTP08
-        Decoder = allmodels.DecoderGenBTP08
-        save_file_name = "GenBTP08_CH0256"
-        model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
-        model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
-        arch_di[save_file_name] = {}
-        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152))
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 144))
-        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
+        
 
         return(arch_di)
 
