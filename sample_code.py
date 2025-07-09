@@ -32,7 +32,7 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    model_tag = "GenBTP16_CH0256", 
+    model_tag = "conv_tran_L5_TP32", 
     device = device
 	)
 
@@ -53,7 +53,7 @@ at = AutoencoderTrain(
     device = device
 	)
 
-_, _, tstmp = at.train_autoencoder(n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = True)
+_, _, tstmp = at.train_autoencoder(n_epochs = 10, batch_size_tr = 8, batch_size_te = 32, devel = True)
 
 # EvaluateReconstruction
 er = EvaluateReconstruction(dir_models = model_dir, device = device)
