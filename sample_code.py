@@ -53,7 +53,7 @@ at = AutoencoderTrain(
     device = device
 	)
 
-_, _, tstmp = at.train_autoencoder(n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = True)
+_, _, tstmp = at.train_autoencoder(n_epochs = 10, batch_size_tr = 8, batch_size_te = 32, devel = True)
 
 # EvaluateReconstruction
 er = EvaluateReconstruction(dir_models = model_dir, device = device)
