@@ -58,58 +58,29 @@ class MakeColdAutoencoders:
         #--------------------------------
         # primary models 
 
-        # Gen B REFERENCE model 
-        Encoder = allmodels.EncoderGenB_TP32
-        Decoder = allmodels.DecoderGenB_TP32
-        save_file_name = "GenBTP32_CH0256"
-        model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 128, 256])
-        model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 128, 64])
+        # REFERENCE model 
+        Encoder = allmodels.Encoder_conv_L5_TP32
+        Decoder = allmodels.Decoder_tran_L5_TP32
+        save_file_name = "conv_tran_L5_TP32"
+        model_enc = Encoder(n_ch_in = 3,   n_ch_out  = 256, ch = [64, 64, 128, 256])
+        model_dec = Decoder(n_ch_in = 256, n_ch_out =    3, ch = [256, 128, 64, 64])
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # Gen C - without transpose conv
-        Encoder = allmodels.EncoderGenC_TP32
-        Decoder = allmodels.DecoderGenC_TP32
-        save_file_name = "GenC_new_TP32_CH0256"
-        model_enc = Encoder(n_ch_in = 3, n_ch_out = 256, ch = [64, 128, 128, 128])
-        model_dec = Decoder(n_ch_in = 256, n_ch_out = 3, ch = [128, 128, 128, 64])
+        # without transpose conv
+        Encoder = allmodels.Encoder_conv_L5_TP32
+        Decoder = allmodels.Decoder_conv_L5_TP32
+        save_file_name = "conv_conv_L5_TP32"
+        model_enc = Encoder(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+        model_dec = Decoder(n_ch_in = 256, n_ch_out =   3, ch = [256, 128, 64, 64])
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
-
-        # Gen D - model with only 3 convolutional blocks (better reconstruction but small receptive field)
-        Encoder = allmodels.EncoderGenD_TP08
-        Decoder = allmodels.DecoderGenD_TP08
-        save_file_name = "GenB3blocks"
-        model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256])
-        model_dec = Decoder(n_ch_out = 3, ch = [256, 128, 128, 64])
-        arch_di[save_file_name] = {}
-        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 144), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
-
-        #--------------------------------
-        # variants of Gen B models 
-        Encoder = allmodels.EncoderGenB_TP32
-        Decoder = allmodels.DecoderGenB_TP32
-        save_file_name = "GenBTP32_CH0512"
-        model_enc = Encoder(n_ch_in = 3, ch = [64, 128, 128, 256, 512])
-        model_dec = Decoder(n_ch_out = 3, ch = [512, 256, 128, 128, 64])
-        arch_di[save_file_name] = {}
-        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 512, 1, 36), depth = 1)
-        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
-        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
-
-       
-
-        
 
         return(arch_di)
 
