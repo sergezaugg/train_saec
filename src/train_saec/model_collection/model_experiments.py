@@ -14,16 +14,7 @@ if __name__ == "__main__":
     # summary(model_enc, (1, 3, 128, 1152), depth = 1)
     # summary(model_dec, (1, 256, 1, 36), depth = 1)
 
-    class EncoderLSTM_A(nn.Module):
-        def __init__(self):
-            super().__init__()
-            self.lstm0 = nn.LSTM(input_size = 128, hidden_size = 32, num_layers=1, bidirectional=True, batch_first=True)
-            
-        def forward(self, x):
-            out, hidden = self.lstm0(x)
-            return out, hidden
-
-
+   
     class LSTMNet(nn.Module):
         def __init__(self, vocab_size=20, embed_dim=300, hidden_dim=512, num_layers=2):
             super().__init__()
@@ -40,21 +31,14 @@ if __name__ == "__main__":
             return out, hidden
 
     summary(
-        EncoderLSTM_A(), 
-        (1, 128),
-        dtypes=[torch.long]
-        )
-
-    summary(
         LSTMNet(),
         (1, 100),
         dtypes=[torch.long],
         )
+    
 
-    model_enc = EncoderLSTM_A()
+    summary(LSTMNet(), (1, 3, 128, 1152), depth = 1)
 
-    # x = torch.randn(1,1152, 128)
-    # out = model_enc(x) # works
-    # out[0].shape
 
+   
 
