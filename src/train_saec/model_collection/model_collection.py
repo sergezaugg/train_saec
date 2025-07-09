@@ -143,12 +143,11 @@ class Decoder_conv_L5_TP32(nn.Module):
         return x
 
 
-
 # -------------------------------------------------
-# GEN D 3blocks - better for hi freq features - textures ? (freq-pool : 128 - time-pool : 8)
+# simpler model (freq-pool : 128 - time-pool : 8)
 
-class EncoderGenD_TP08(nn.Module):
-    def __init__(self, n_ch_in = 3, ch = [64, 128, 128, 256]):
+class Encoder_conv_L4_TP08(nn.Module):
+    def __init__(self, n_ch_in = 3, n_ch_out = 256,  ch = [64, 128, 128]):
         super().__init__()
         po = [(2, 2), (2, 2), (2, 2)]
         self.padding =  "same"
@@ -171,7 +170,7 @@ class EncoderGenD_TP08(nn.Module):
             nn.ReLU(),
             nn.AvgPool2d(po[2], stride=po[2]))
         self.conv3 = nn.Sequential(
-            nn.Conv2d(ch[2], ch[3], kernel_size=(16,1), stride=1, padding='valid'),
+            nn.Conv2d(ch[2], n_ch_out, kernel_size=(16,1), stride=1, padding='valid'),
             )   
     def forward(self, x):
         x = self.conv0(x)
@@ -180,28 +179,27 @@ class EncoderGenD_TP08(nn.Module):
         x = self.conv3(x)
         return(x)
     
-class DecoderGenD_TP08(nn.Module):
-    def __init__(self, n_ch_out=3, ch = [256, 128, 128, 128]):
+class Decoder_tran_L4_TP08(nn.Module):
+    def __init__(self, n_ch_in = 256, n_ch_out=3, ch = [128, 128, 64]):
         super().__init__()
         po =  [(2, 2), (2, 2), (2, 2)]
         self.tconv0 = nn.Sequential(
-            nn.ConvTranspose2d(ch[0], ch[1], kernel_size=(16,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
-            nn.BatchNorm2d(ch[1]),
+            nn.ConvTranspose2d(n_ch_in, ch[0], kernel_size=(16,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
+            nn.BatchNorm2d(ch[0]),
             nn.ReLU()
             )
         self.tconv1 = nn.Sequential(
-            nn.ConvTranspose2d(ch[1], ch[2], kernel_size=(5,5), stride=po[1], padding=(2,2), output_padding=(1,1)), 
-            nn.BatchNorm2d(ch[2]),
+            nn.ConvTranspose2d(ch[0], ch[1], kernel_size=(5,5), stride=po[0], padding=(2,2), output_padding=(1,1)), 
+            nn.BatchNorm2d(ch[1]),
             nn.ReLU()
             )
         self.tconv2 = nn.Sequential(
-            nn.ConvTranspose2d(ch[2], ch[3], kernel_size=(5,5), stride=po[2], padding=(2,2), output_padding=(1,1)),  
-            nn.BatchNorm2d(ch[3]),
+            nn.ConvTranspose2d(ch[1], ch[2], kernel_size=(5,5), stride=po[1], padding=(2,2), output_padding=(1,1)),  
+            nn.BatchNorm2d(ch[2]),
             nn.ReLU()
             )
         self.tconv3 = nn.Sequential(
-            nn.ConvTranspose2d(ch[3], n_ch_out, kernel_size=(5,5), stride=po[2], padding=(2,2), output_padding=(1,1)),  
-            nn.BatchNorm2d(n_ch_out),
+            nn.ConvTranspose2d(ch[2], n_ch_out, kernel_size=(5,5), stride=po[2], padding=(2,2), output_padding=(1,1)),  
             nn.Sigmoid()
             )
     def forward(self, x):
@@ -210,7 +208,6 @@ class DecoderGenD_TP08(nn.Module):
         x = self.tconv2(x)
         x = self.tconv3(x)
         return x
-# -------------------------------------------------
 
 
 
@@ -223,31 +220,23 @@ if __name__ == "__main__":
 
     from torchinfo import summary
 
-    # conv-tran
-    model_enc = Encoder_conv_L5_TP32(n_ch_in = 3, n_ch_out = 256, ch = [64, 64, 128, 256])
-    model_dec = Decoder_tran_L5_TP32(n_ch_in = 256, n_ch_out = 3, ch = [256, 128, 64, 64])
+    # conv-tran TP32
+    model_enc = Encoder_conv_L5_TP32(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+    model_dec = Decoder_tran_L5_TP32(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
     summary(model_dec, (1, 256, 1, 36), depth = 1)
 
-    # conv-conv
-    model_enc = Encoder_conv_L5_TP32(n_ch_in = 3, n_ch_out = 256, ch = [64, 64, 128, 256])
-    model_dec = Decoder_conv_L5_TP32(n_ch_in = 256, n_ch_out = 3, ch = [256, 128, 64, 64])
+    # conv-conv TP32
+    model_enc = Encoder_conv_L5_TP32(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+    model_dec = Decoder_conv_L5_TP32(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
     summary(model_dec, (1, 256, 1, 36), depth = 1)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # conv-tran TP08 
+    model_enc = Encoder_conv_L4_TP08(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128])
+    model_dec = Decoder_tran_L4_TP08(n_ch_in = 256, n_ch_out= 3,    ch = [128, 64, 64])
+    summary(model_enc, (1, 3, 128, 1152), depth = 1)
+    summary(model_dec, (1, 256, 1, 144), depth = 1)
 
 
 
