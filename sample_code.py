@@ -32,7 +32,7 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    model_tag = "GenBTP16_CH0256", 
+    model_tag = "conv_tran_L5_TP32", 
     device = device
 	)
 
