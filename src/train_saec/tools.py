@@ -24,7 +24,7 @@ from importlib.resources import files
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("gamba-roja")
+print("gaviota-negra")
 # path_json = "train_saec.data_gen_presets"
 # print('files(path_json)', files(path_json))
 
@@ -58,7 +58,7 @@ class MakeColdAutoencoders:
         #--------------------------------
         # primary models 
 
-        # REFERENCE model 
+        # REFERENCE model 256
         Encoder = allmodels.Encoder_conv_L5_TP32
         Decoder = allmodels.Decoder_tran_L5_TP32
         save_file_name = "conv_tran_L5_TP32"
@@ -67,6 +67,18 @@ class MakeColdAutoencoders:
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
+
+        # REFERENCE model larger (512)
+        Encoder = allmodels.Encoder_conv_L5_TP32
+        Decoder = allmodels.Decoder_tran_L5_TP32
+        save_file_name = "conv_tran_L5_TP32_ch512"
+        model_enc = Encoder(n_ch_in = 3,   n_ch_out  = 515, ch = [64, 64, 128, 256])
+        model_dec = Decoder(n_ch_in = 512, n_ch_out =    3, ch = [256, 128, 64, 64])
+        arch_di[save_file_name] = {}
+        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
+        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 512, 1, 36), depth = 1)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
@@ -81,7 +93,6 @@ class MakeColdAutoencoders:
         arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
-
 
         # simpler model (freq-pool : 128 - time-pool : 8)
         Encoder = allmodels.Encoder_conv_L4_TP08 # Encoder_conv_L4_TP08
