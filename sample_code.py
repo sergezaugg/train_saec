@@ -33,7 +33,8 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    model_tag = "conv_tran_L5_TP32_ch512", 
+    # model_tag = "conv_tran_L5_TP32_ch512", 
+    model_tag = "conv_tran_L5_sym", 
     device = device
 	)
 

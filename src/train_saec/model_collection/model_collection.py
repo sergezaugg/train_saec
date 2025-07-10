@@ -210,6 +210,90 @@ class Decoder_tran_L4_TP08(nn.Module):
         return x
 
 
+# -------------------------------------------------
+# Encoder / Decoder  (freq-pool : 128 - time-pool : 128)
+class Encoder_conv_L5_sym(nn.Module):
+    def __init__(self, n_ch_in = 3, n_ch_out = 256, ch = [64, 128, 128, 128]):
+        super().__init__()
+        po = [(2, 2), (4, 4), (4, 4), (2, 2), (2, 2)]
+        self.padding =  "same"
+        conv_kernel = (3,3)
+        self.conv0 = nn.Sequential(
+            nn.Conv2d(n_ch_in,  ch[0], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.Conv2d(ch[0],  ch[0], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.BatchNorm2d(ch[0]),
+            nn.ReLU(),
+            nn.AvgPool2d(po[0], stride=po[0]))
+        self.conv1 = nn.Sequential(
+            nn.Conv2d(ch[0], ch[1], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.Conv2d(ch[1], ch[1], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.BatchNorm2d(ch[1]),
+            nn.ReLU(),
+            nn.AvgPool2d(po[1], stride=po[1]))
+        self.conv2 = nn.Sequential(
+            nn.Conv2d(ch[1], ch[2], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.Conv2d(ch[2], ch[2], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.BatchNorm2d(ch[2]),
+            nn.ReLU(),
+            nn.AvgPool2d(po[2], stride=po[2]))
+        self.conv3 = nn.Sequential(
+            nn.Conv2d(ch[2], ch[3], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.Conv2d(ch[3], ch[3], kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.BatchNorm2d(ch[3]),
+            nn.ReLU(),
+            nn.AvgPool2d(po[3], stride=po[3]))
+        self.conv4 = nn.Sequential(
+            nn.Conv2d(ch[3], n_ch_out, kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.Conv2d(n_ch_out, n_ch_out, kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.AvgPool2d(po[4], stride=po[4]))
+    def forward(self, x):
+        x = self.conv0(x)
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        return(x)
+
+class Decoder_tran_L5_sym(nn.Module):
+    def __init__(self, n_ch_in=256, n_ch_out=3, ch = [128, 128, 128, 64]):
+        super().__init__()
+        po =  [(2, 2), (2, 2), (4, 4), (4, 4), (2, 2)]
+        self.tconv0 = nn.Sequential(
+            nn.ConvTranspose2d(n_ch_in, ch[0], kernel_size=(5,5), stride=po[0], padding=(2,2), output_padding=(1,1)), 
+            nn.BatchNorm2d(ch[0]),
+            nn.ReLU()
+            )
+        self.tconv1 = nn.Sequential(
+            nn.ConvTranspose2d(ch[0], ch[1], kernel_size=(5,5), stride=po[1], padding=(2,2), output_padding=(1,1)), 
+            nn.BatchNorm2d(ch[1]),
+            nn.ReLU()
+            )
+        self.tconv2 = nn.Sequential(
+            nn.ConvTranspose2d(ch[1], ch[2], kernel_size=(5,5), stride=po[2], padding=(1,1), output_padding=(1,1)),  
+            nn.BatchNorm2d(ch[2]),
+            nn.ReLU()
+            )
+        self.tconv3 = nn.Sequential(
+            nn.ConvTranspose2d(ch[2], ch[3], kernel_size=(5,5), stride=po[3], padding=(1,1),  output_padding=(1,1)), 
+            nn.BatchNorm2d(ch[3]),
+            nn.ReLU()
+            )
+        self.out_map = nn.Sequential(
+            nn.ConvTranspose2d(ch[3], n_ch_out, kernel_size=(5,5), stride=po[4], padding=(2,2),  output_padding=(1,1)), 
+            nn.Sigmoid()
+            )
+    def forward(self, x):
+        x = self.tconv0(x)
+        x = self.tconv1(x)
+        x = self.tconv2(x)
+        x = self.tconv3(x)
+        x = self.out_map(x)
+        return x
+
+
+
+
+
 
 
 
@@ -238,7 +322,14 @@ if __name__ == "__main__":
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
     summary(model_dec, (1, 256, 1, 144), depth = 1)
 
+    # conv-tran sym
+    model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+    model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
+    summary(model_enc, (1, 3, 128, 1152), depth = 1)
+    summary(model_dec, (1, 256, 1, 9), depth = 1)
 
+
+  
 
 
     torch.cuda.is_available()
