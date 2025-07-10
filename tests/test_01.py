@@ -36,7 +36,7 @@ li011, li012, tstmp01 = at01.train_autoencoder(n_epochs = 1, batch_size_tr = 4, 
 del(at01)
 gc.collect()
 
-at02 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_conv_L5_TP32", 'daugm_denoise', device)
+at02 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_L5_TP32_ch512", 'daugm_denoise', device)
 fig02 = at02.make_data_augment_examples(batch_size = 5)
 li021, li022, tstmp02 = at02.train_autoencoder(n_epochs = 2, batch_size_tr = 2, batch_size_te = 3, devel = True)
 del(at02)

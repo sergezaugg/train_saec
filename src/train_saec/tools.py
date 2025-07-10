@@ -74,7 +74,7 @@ class MakeColdAutoencoders:
         Encoder = allmodels.Encoder_conv_L5_TP32
         Decoder = allmodels.Decoder_tran_L5_TP32
         save_file_name = "conv_tran_L5_TP32_ch512"
-        model_enc = Encoder(n_ch_in = 3,   n_ch_out  = 515, ch = [64, 64, 128, 256])
+        model_enc = Encoder(n_ch_in = 3,   n_ch_out  = 512, ch = [64, 64, 128, 256])
         model_dec = Decoder(n_ch_in = 512, n_ch_out =    3, ch = [256, 128, 64, 64])
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
@@ -345,7 +345,7 @@ class AutoencoderTrain:
                 optimizer.zero_grad()
                 # forward 
                 encoded = self.model_enc(da_tr_1)
-                # encoded.shape
+                # print('encoded.shape', encoded.shape)
                 decoded = self.model_dec(encoded)
                 # compute the reconstruction loss 
                 loss = criterion(decoded, da_tr_2)
