@@ -30,6 +30,11 @@ dat_tes_dir = "dev/data/test/images"
 mca = MakeColdAutoencoders(dir_models = model_dir)
 mod_arch = mca.make()
 
+at01b = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_L5_sym", 'daugm_denoise', device)
+li011b, li012b, tstmp01b = at01b.train_autoencoder(n_epochs = 2, batch_size_tr = 5, batch_size_te = 4, devel = True)
+del(at01b)
+gc.collect()
+
 at01 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_L5_TP32", 'baseline', device)
 fig01 = at01.make_data_augment_examples(batch_size = 4)
 li011, li012, tstmp01 = at01.train_autoencoder(n_epochs = 1, batch_size_tr = 4, batch_size_te = 4, devel = True)
@@ -62,7 +67,7 @@ def test_MakeColdAutoencoders_001():
     assert isinstance(mca, MakeColdAutoencoders)
 
 def test_MakeColdAutoencoders_002():
-    assert len(mod_arch) == 4
+    assert len(mod_arch) == 5
 
 def test_AutoencoderTrain_01():
     assert len(li011) == 1
