@@ -20,13 +20,11 @@ import torchvision.transforms.v2 as transforms
 import torch.optim as optim
 from torchinfo import summary
 from importlib.resources import files
-
+# import own items
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("gaviota-negra")
-# path_json = "train_saec.data_gen_presets"
-# print('files(path_json)', files(path_json))
+print("kangourou-turqoise")
 
 
 class MakeColdAutoencoders:
