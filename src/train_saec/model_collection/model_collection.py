@@ -211,11 +211,11 @@ class Decoder_tran_L4_TP08(nn.Module):
 
 
 # -------------------------------------------------
-# Encoder / Decoder  (freq-pool : 128 - time-pool : 128)
+# Encoder / Decoder  (freq-pool : 32+4 - time-pool : 32)
 class Encoder_conv_L5_sym(nn.Module):
     def __init__(self, n_ch_in = 3, n_ch_out = 256, ch = [64, 128, 128, 128]):
         super().__init__()
-        po = [(2, 2), (4, 4), (4, 4), (2, 2), (2, 2)]
+        po = [(2, 2), (2, 2), (2, 2), (2, 2), (2, 2)]
         self.padding =  "same"
         conv_kernel = (3,3)
         self.conv0 = nn.Sequential(
@@ -245,19 +245,31 @@ class Encoder_conv_L5_sym(nn.Module):
         self.conv4 = nn.Sequential(
             nn.Conv2d(ch[3], n_ch_out, kernel_size=conv_kernel, stride=1, padding=self.padding),
             nn.Conv2d(n_ch_out, n_ch_out, kernel_size=conv_kernel, stride=1, padding=self.padding),
+            nn.BatchNorm2d(n_ch_out),
+            nn.ReLU(),
             nn.AvgPool2d(po[4], stride=po[4]))
+        # spec layer to combine the freq to 1 dim
+        self.conv_spec = nn.Sequential(
+            nn.Conv2d(n_ch_out, n_ch_out, kernel_size=(4,1), stride=1, padding='valid'),
+            )
     def forward(self, x):
         x = self.conv0(x)
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
         x = self.conv4(x)
+        x = self.conv_spec(x)
         return(x)
 
 class Decoder_tran_L5_sym(nn.Module):
     def __init__(self, n_ch_in=256, n_ch_out=3, ch = [128, 128, 128, 64]):
         super().__init__()
-        po =  [(2, 2), (2, 2), (4, 4), (4, 4), (2, 2)]
+        po =  [(2, 2), (2, 2), (2, 2), (2, 2), (2, 2)]
+        self.tconv_spec = nn.Sequential(
+            nn.ConvTranspose2d(n_ch_in, n_ch_in, kernel_size=(4,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
+            nn.BatchNorm2d(n_ch_in),
+            nn.ReLU()
+            )
         self.tconv0 = nn.Sequential(
             nn.ConvTranspose2d(n_ch_in, ch[0], kernel_size=(5,5), stride=po[0], padding=(2,2), output_padding=(1,1)), 
             nn.BatchNorm2d(ch[0]),
@@ -269,12 +281,12 @@ class Decoder_tran_L5_sym(nn.Module):
             nn.ReLU()
             )
         self.tconv2 = nn.Sequential(
-            nn.ConvTranspose2d(ch[1], ch[2], kernel_size=(5,5), stride=po[2], padding=(1,1), output_padding=(1,1)),  
+            nn.ConvTranspose2d(ch[1], ch[2], kernel_size=(5,5), stride=po[2], padding=(2,2), output_padding=(1,1)),  
             nn.BatchNorm2d(ch[2]),
             nn.ReLU()
             )
         self.tconv3 = nn.Sequential(
-            nn.ConvTranspose2d(ch[2], ch[3], kernel_size=(5,5), stride=po[3], padding=(1,1),  output_padding=(1,1)), 
+            nn.ConvTranspose2d(ch[2], ch[3], kernel_size=(5,5), stride=po[3], padding=(2,2),  output_padding=(1,1)), 
             nn.BatchNorm2d(ch[3]),
             nn.ReLU()
             )
@@ -283,6 +295,7 @@ class Decoder_tran_L5_sym(nn.Module):
             nn.Sigmoid()
             )
     def forward(self, x):
+        x = self.tconv_spec(x)
         x = self.tconv0(x)
         x = self.tconv1(x)
         x = self.tconv2(x)
@@ -326,7 +339,7 @@ if __name__ == "__main__":
     model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
     model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    summary(model_dec, (1, 256, 1, 9), depth = 1)
+    summary(model_dec, (1, 256, 1, 36), depth = 1)
 
 
   

@@ -20,13 +20,11 @@ import torchvision.transforms.v2 as transforms
 import torch.optim as optim
 from torchinfo import summary
 from importlib.resources import files
-
+# import own items
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("gaviota-negra")
-# path_json = "train_saec.data_gen_presets"
-# print('files(path_json)', files(path_json))
+print("kangourou-turqoise")
 
 
 class MakeColdAutoencoders:
@@ -58,7 +56,7 @@ class MakeColdAutoencoders:
         #--------------------------------
         # primary models 
 
-        # REFERENCE model 256
+        # REFERENCE model standard (256)
         Encoder = allmodels.Encoder_conv_L5_TP32
         Decoder = allmodels.Decoder_tran_L5_TP32
         save_file_name = "conv_tran_L5_TP32"
@@ -70,7 +68,7 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # SYMMETRIC model 256
+        # sort-of-SYMMETRIC model 256
         Encoder = allmodels.Encoder_conv_L5_sym
         Decoder = allmodels.Decoder_tran_L5_sym
         save_file_name = "conv_tran_L5_sym"
@@ -78,10 +76,9 @@ class MakeColdAutoencoders:
         model_dec = Decoder(n_ch_in = 256, n_ch_out =    3, ch = [256, 128, 64, 64])
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1)
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 9), depth = 1)
+        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 36), depth = 1)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
-
 
         # REFERENCE model larger (512)
         Encoder = allmodels.Encoder_conv_L5_TP32
