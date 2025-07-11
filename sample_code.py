@@ -7,14 +7,8 @@
 # conf no-direct-imports:   pip uninstall train_saec
 #--------------------------------
 
-# check where from pkg was imported
-import train_saec.tools
-pkg_import_source = train_saec.tools.__file__
-print(pkg_import_source)
-
 import torch
 from train_saec.tools import MakeColdAutoencoders, AutoencoderTrain, EvaluateReconstruction
-
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 model_dir = "dev/outp/model_dir"
@@ -33,7 +27,6 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    # model_tag = "conv_tran_L5_TP32_ch512", 
     model_tag = "conv_tran_L5_sym", 
     device = device
 	)
@@ -55,7 +48,8 @@ at = AutoencoderTrain(
     device = device
 	)
 
-_, _, tstmp = at.train_autoencoder(n_epochs = 10, batch_size_tr = 8, batch_size_te = 32, devel = True)
+# Resume training 
+_, _, tstmp = at.train_autoencoder(n_epochs = 2, batch_size_tr = 8, batch_size_te = 32, devel = True)
 
 # EvaluateReconstruction
 er = EvaluateReconstruction(dir_models = model_dir, device = device)
