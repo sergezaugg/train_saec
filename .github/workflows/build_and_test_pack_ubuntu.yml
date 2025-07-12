@@ -1,4 +1,4 @@
-name: build_and_test_package
+name: build_and_test_package_ubu
 
 on:
   pull_request:

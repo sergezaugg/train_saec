@@ -1,4 +1,4 @@
-name: build_and_test_package
+name: build_and_test_package_win
 
 on:
   # pull_request:
