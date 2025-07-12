@@ -307,27 +307,18 @@ class Decoder_tran_L5_sym(nn.Module):
 
 
 # -------------------------------------------------
-# Proposed by ChatGPT:
-# I need a CNN architecture to extract features for texture classification, what can you recommend ?
-# I am using grayscale images of size 128 by 256 pixels 
+# Encoder draft Proposed by ChatGPT + major modifs by Serge, Decoder by Serge:
+# "I need a CNN architecture to extract features for texture classification, what can you recommend ?""
+# "I am using images of size 128 by 256 pixels"
 
 class ReshapeLayer(nn.Module):
-    """ array of dim (b, ch, f, t) is reshaped to (b, ch*f, t)"""
+    """ array of dim (b, ch, f, t) is reshaped to (b, ch*f, t) , or the reverse"""
     def __init__(self, *target_shape):
         super().__init__()
         self.target_shape = target_shape  # Shape excluding the batch size
     def forward(self, x):
         return x.view(x.size(0), *self.target_shape, x.size(3))
         # Or use x.reshape if you're worried about non-contiguous tensors:
-
-# class ReshapeLayerRev(nn.Module):
-#     """ array of dim (b, ch*f, t) is reshaped to (b, ch, f, t) """
-#     def __init__(self, *target_shape):
-#         super(ReshapeLayerRev, self).__init__()
-#         self.target_shape = target_shape  
-#     def forward(self, x):
-#         return x.view(x.size(0), *self.target_shape, x.size(3))
-       
 
 class Encoder_texture(nn.Module):
     def __init__(self):
