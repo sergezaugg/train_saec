@@ -5,6 +5,9 @@
 # install build:        pip install --upgrade dist\train_saec-0.1.3-py3-none-any.whl
 # to work in dev        pip install --upgrade -e .
 #                       pip uninstall train_saec
+# 
+# pip install pytest-random-order
+# pytest --random-order
 #--------------------------------
 
 import gc
@@ -33,7 +36,7 @@ mod_arch = mca.make()
 
 # (1) try an run each defined model
 
-at01 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_L5_TP32", 'baseline', device)
+at01 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_L5_TP32_ch256", 'baseline', device)
 fig01 = at01.make_data_augment_examples(batch_size = 4)
 li011, li012, tstmp01 = at01.train_autoencoder(n_epochs = 1, batch_size_tr = 2, batch_size_te = 2, devel = True)
 del(at01)
