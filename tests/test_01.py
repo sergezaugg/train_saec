@@ -85,7 +85,7 @@ def test_MakeColdAutoencoders_001():
     assert isinstance(mca, MakeColdAutoencoders)
 
 def test_MakeColdAutoencoders_002():
-    assert len(mod_arch) == 5
+    assert len(mod_arch) == 6
 
 def test_AutoencoderTrain_01():
     assert len(li011) == 1
