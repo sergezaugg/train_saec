@@ -63,6 +63,11 @@ li051, li052, _ = at05.train_autoencoder(n_epochs = 1, batch_size_tr = 2, batch_
 del(at05)
 gc.collect()
 
+at06 = AutoencoderTrain(model_dir, dat_tra_dir, dat_tes_dir, False, "conv_tran_texture_01", 'daugm_denoise', device)
+li061, li062, _ = at06.train_autoencoder(n_epochs = 3, batch_size_tr = 2, batch_size_te = 4, devel = True)
+del(at06)
+gc.collect()
+
 # (2) assess other methods 
 
 # run from pretrained 
@@ -74,7 +79,6 @@ gc.collect()
 
 er = EvaluateReconstruction(dir_models = model_dir, device = device)
 fig_reconst = er.evaluate_reconstruction_on_examples(dat_tes_dir, tstmp03, n_images = 8, shuffle = False)
-
 
 #----------------------------------------------
 # perform the tests
@@ -88,7 +92,7 @@ def test_MakeColdAutoencoders_001():
     assert isinstance(mca, MakeColdAutoencoders)
 
 def test_MakeColdAutoencoders_002():
-    assert len(mod_arch) == 5
+    assert len(mod_arch) == 6
 
 def test_AutoencoderTrain_01():
     assert len(li011) == 1
@@ -102,13 +106,17 @@ def test_AutoencoderTrain_03():
     assert len(li031) == 1
     assert len(li032) == 1
 
-def test_AutoencoderTrain_03():
+def test_AutoencoderTrain_04():
     assert len(li041) == 2
     assert len(li042) == 2
 
-def test_AutoencoderTrain_03():
+def test_AutoencoderTrain_05():
     assert len(li051) == 1
     assert len(li052) == 1
+
+def test_AutoencoderTrain_06():
+    assert len(li061) == 3
+    assert len(li062) == 3
 
 def test_fig_data_augment():
     assert isinstance(fig01, plotly.graph_objs._figure.Figure)
