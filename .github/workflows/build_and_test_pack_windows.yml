@@ -1,0 +1,60 @@
+name: build_and_test_package_win
+
+on:
+  # pull_request:
+  #   branches: [ "main" ] # .... 
+  workflow_dispatch: 
+  # push:  
+  #   branches: [ "feat" ] # temp  
+
+jobs:
+  build_on_pull_request:
+
+    # runs-on: ubuntu-latest
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}    
+
+      - name: get the wd
+        run: pwd  
+
+      - name: get Python version
+        run: python -V
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+      - name: Install dependencies 
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install torch torchvision
+          python -m pip install pytest
+      # python -m pip install dist/*.whl
+
+      # quick fix 
+      - name: Install dependencies for testing (powershell)
+        shell: powershell
+        run: |
+          $wheels = Get-ChildItem dist\*.whl
+          foreach ($whl in $wheels) {
+            python -m pip install $whl.FullName
+          }
+
+      - name: get pip list
+        run: pip list   
+
+      - name: Run tests 
+        run: |
+          pytest -s
+

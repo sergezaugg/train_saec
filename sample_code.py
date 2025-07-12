@@ -27,7 +27,8 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    model_tag = "conv_tran_L5_sym", 
+    # model_tag = "conv_tran_L5_sym", 
+    model_tag = "conv_tran_texture_01", 
     device = device
 	)
 
@@ -35,7 +36,7 @@ at = AutoencoderTrain(
 at.make_data_augment_examples().show()
 
 # Start training (.pth files will be saved to disk)
-_, _, tstmp = at.train_autoencoder(n_epochs = 3, batch_size_tr = 8, batch_size_te = 32, devel = True)
+_, _, tstmp = at.train_autoencoder(n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = False)
 
 # Or, initialize a AEC-trainer with a pre-trained model
 at = AutoencoderTrain(
@@ -49,7 +50,7 @@ at = AutoencoderTrain(
 	)
 
 # Resume training 
-_, _, tstmp = at.train_autoencoder(n_epochs = 2, batch_size_tr = 8, batch_size_te = 32, devel = True)
+_, _, tstmp = at.train_autoencoder(n_epochs = 5, batch_size_tr = 8, batch_size_te = 32, devel = False)
 
 # EvaluateReconstruction
 er = EvaluateReconstruction(dir_models = model_dir, device = device)
