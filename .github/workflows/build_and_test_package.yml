@@ -40,7 +40,18 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install torch torchvision
           python -m pip install pytest
-          python -m pip install dist/*.whl
+      # python -m pip install dist/*.whl
+
+      # quick fix 
+      - name: Install dependencies for testing (powershell)
+        shell: powershell
+        run: |
+          $wheels = Get-ChildItem dist\*.whl
+          foreach ($whl in $wheels) {
+            python -m pip install $whl.FullName
+          }
+
+
 
       - name: get pip list
         run: pip list   
