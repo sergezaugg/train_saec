@@ -59,7 +59,7 @@ class MakeColdAutoencoders:
         # REFERENCE model standard (256)
         Encoder = allmodels.Encoder_conv_L5_TP32
         Decoder = allmodels.Decoder_tran_L5_TP32
-        save_file_name = "conv_tran_L5_TP32"
+        save_file_name = "conv_tran_L5_TP32_ch256"
         model_enc = Encoder(n_ch_in = 3,   n_ch_out  = 256, ch = [64, 64, 128, 256])
         model_dec = Decoder(n_ch_in = 256, n_ch_out =    3, ch = [256, 128, 64, 64])
         arch_di[save_file_name] = {}
