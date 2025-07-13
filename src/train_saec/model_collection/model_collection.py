@@ -371,10 +371,8 @@ class Decoder_texture(nn.Module):
         x = self.tconv3(x)
         return x
 
-
 # -------------------------------------------------
 # Encoder with reshape 
-
 
 class ReshapeLayer(nn.Module):
     """ array of dim (b, ch, f, t) is reshaped to (b, ch*f, t) , or the reverse"""
