@@ -116,7 +116,7 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # shallower model for Textures - hmmm  
+        # shallower model for Textures 
         Encoder = allmodels.Encoder_texture 
         Decoder = allmodels.Decoder_texture
         save_file_name = "conv_tran_texture_01"
