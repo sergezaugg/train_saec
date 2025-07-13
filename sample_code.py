@@ -19,7 +19,7 @@ dat_tes_dir = "dev/data/test/images"
 mca = MakeColdAutoencoders(dir_models = model_dir)
 mod_arch = mca.make()
 mod_arch.keys()
-
+mod_arch['conv_tran_texture_01']
 
 #----------------------------------------------------
 # Either, initialize a AEC-trainer with a naive model 
@@ -37,7 +37,7 @@ at = AutoencoderTrain(
 at.make_data_augment_examples().show()
 
 # Start training (.pth files will be saved to disk)
-_, _, tstmp = at.train_autoencoder(n_epochs = 1, batch_size_tr = 8, batch_size_te = 32, devel = False)
+_, _, tstmp = at.train_autoencoder(n_epochs = 8, batch_size_tr = 8, batch_size_te = 32, devel = False)
 
 
 #----------------------------------------------------

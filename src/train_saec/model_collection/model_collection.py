@@ -405,11 +405,11 @@ if __name__ == "__main__":
     # summary(model_enc, (1, 3, 128, 1152), depth = 1)
     # summary(model_dec, (1, 256, 1, 144), depth = 1)
 
-    # conv-tran sym
-    model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
-    model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
-    summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    summary(model_dec, (1, 256, 1, 36), depth = 1)
+    # # conv-tran sym
+    # model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+    # model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
+    # summary(model_enc, (1, 3, 128, 1152), depth = 1)
+    # summary(model_dec, (1, 256, 1, 36), depth = 1)
 
     model_enc = Encoder_texture(n_ch_in = 3, n_ch_out = 512)
     model_dec = Decoder_texture(n_ch_in = 512, n_ch_out = 3)
