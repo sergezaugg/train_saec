@@ -373,7 +373,7 @@ class Decoder_texture(nn.Module):
 
 
 # -------------------------------------------------
-# Encoder with rehshape 
+# Encoder with reshape 
 
 
 class ReshapeLayer(nn.Module):

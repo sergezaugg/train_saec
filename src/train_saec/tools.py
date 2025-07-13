@@ -128,6 +128,18 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
+        # shallower model for Textures II (reshape)
+        Encoder = allmodels.Encoder_reshape 
+        Decoder = allmodels.Decoder_reshape
+        save_file_name = "conv_tran_textr_resh"
+        model_enc = Encoder(n_ch_in = 3,  n_ch_convout = 32)
+        model_dec = Decoder(n_ch_convout = 32, n_ch_out = 3)
+        arch_di[save_file_name] = {}
+        arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1, verbose  = 0)
+        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 512, 1, 144), depth = 1, verbose  = 0)
+        torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
+        torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
+
         return(arch_di)
 
 
