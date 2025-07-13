@@ -314,10 +314,10 @@ class ReshapeLayer(nn.Module):
         # Or use x.reshape if you're worried about non-contiguous tensors:
 
 class Encoder_texture(nn.Module):
-    def __init__(self):
+    def __init__(self, n_ch_in = 3, n_ch_out = 256):
         super().__init__()
         self.conv0 = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),   
+            nn.Conv2d(n_ch_in, 32, kernel_size=3, padding=1),   
             nn.BatchNorm2d(32),
             nn.ReLU())
         self.conv1 = nn.Sequential(
@@ -333,19 +333,30 @@ class Encoder_texture(nn.Module):
         self.conv3 = nn.Sequential(
             nn.Conv2d(128, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128), )
-        self.reshl = ReshapeLayer(128 * 32 , 1)     
+        # older - nice but make huge dim
+        # self.spec = ReshapeLayer(128 * 32 , 1)  
+        # spec layer to combine the freq to 1 dim
+        self.spec = nn.Sequential(
+            nn.Conv2d(128, n_ch_out, kernel_size=(32,1), stride=1, padding='valid'),
+            )   
     def forward(self, x):
         x = self.conv0(x)
         x = self.conv1(x)
         x = self.conv2(x)
         x = self.conv3(x)
-        x = self.reshl(x)
+        x = self.spec(x)
         return x
 
 class Decoder_texture(nn.Module):
-    def __init__(self):
+    def __init__(self, n_ch_in = 256, n_ch_out = 3):
         super().__init__()
-        self.reshlrev = ReshapeLayer(128, 32)
+        # older - nice but make huge dim
+        # self.spec = ReshapeLayer(128, 32)
+        # spec layer
+        self.spec = nn.Sequential(
+            nn.ConvTranspose2d(n_ch_in, 128, kernel_size=(32,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
+            nn.BatchNorm2d(128),
+            nn.ReLU())
         self.tconv0 = nn.Sequential(
             nn.ConvTranspose2d(128, 128, kernel_size=(3,3), stride=1, padding=(1,1), output_padding=(0,0)), 
             nn.BatchNorm2d(128),
@@ -359,10 +370,10 @@ class Decoder_texture(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU())
         self.tconv3 = nn.Sequential(
-            nn.ConvTranspose2d(32, 3, kernel_size=(3,3), stride=1, padding=(1,1), output_padding=(0,0)), 
+            nn.ConvTranspose2d(32, n_ch_out, kernel_size=(3,3), stride=1, padding=(1,1), output_padding=(0,0)), 
             nn.Sigmoid())
     def forward(self, x):
-        x = self.reshlrev(x)
+        x = self.spec(x)
         x = self.tconv0(x)
         x = self.tconv1(x)
         x = self.tconv2(x)
@@ -394,18 +405,18 @@ if __name__ == "__main__":
     # summary(model_enc, (1, 3, 128, 1152), depth = 1)
     # summary(model_dec, (1, 256, 1, 144), depth = 1)
 
-    # # conv-tran sym
-    # model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
-    # model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
-    # summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    # summary(model_dec, (1, 256, 1, 36), depth = 1)
-
-    model_enc = Encoder_texture()
-    model_dec = Decoder_texture()
-    summary(model_enc, (1, 3, 128, 256), depth = 1)
-    summary(model_dec, (1, 4096, 1, 64), depth = 1)
+    # conv-tran sym
+    model_enc = Encoder_conv_L5_sym(n_ch_in = 3,   n_ch_out = 256, ch = [64, 64, 128, 256])
+    model_dec = Decoder_tran_L5_sym(n_ch_in = 256, n_ch_out = 3,   ch = [256, 128, 64, 64])
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    summary(model_dec, (1, 4096, 1, 288), depth = 1)
+    summary(model_dec, (1, 256, 1, 36), depth = 1)
+
+    model_enc = Encoder_texture(n_ch_in = 3, n_ch_out = 512)
+    model_dec = Decoder_texture(n_ch_in = 512, n_ch_out = 3)
+    # summary(model_enc, (1, 3, 128, 256), depth = 1)
+    # summary(model_dec, (1, 4096, 1, 64), depth = 1)
+    summary(model_enc, (1, 3, 128, 1152), depth = 1)
+    summary(model_dec, (1, 512, 1,  288), depth = 1)
 
 
 
