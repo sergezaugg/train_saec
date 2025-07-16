@@ -299,10 +299,8 @@ class Decoder_tran_L5_sym(nn.Module):
         x = self.out_map(x)
         return x
 
-# # -------------------------------------------------
-# # Encoder draft Proposed by ChatGPT + major modifs by Serge, Decoder by Serge:
-# # "I need a CNN architecture to extract features for texture classification, what can you recommend ?""
-# # "I am using images of size 128 by 256 pixels"
+# -------------------------------------------------
+# Shallower Encoder with conv to pool freqs
 
 class Encoder_texture(nn.Module):
     def __init__(self, n_ch_in = 3, n_ch_out = 256):
@@ -320,15 +318,12 @@ class Encoder_texture(nn.Module):
             nn.Conv2d(64, 128, kernel_size=3, padding=1), 
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            nn.MaxPool2d(2),  )   
+            nn.MaxPool2d(4),  )  
         self.conv3 = nn.Sequential(
             nn.Conv2d(128, 128, kernel_size=3, padding=1),
             nn.BatchNorm2d(128), )
-        # older - nice but make huge dim
-        # self.spec = ReshapeLayer(128 * 32 , 1)  
-        # spec layer to combine the freq to 1 dim
         self.spec = nn.Sequential(
-            nn.Conv2d(128, n_ch_out, kernel_size=(32,1), stride=1, padding='valid'),
+            nn.Conv2d(128, n_ch_out, kernel_size=(16,1), stride=1, padding='valid'), # 32 -> 16
             )   
     def forward(self, x):
         x = self.conv0(x)
@@ -341,11 +336,8 @@ class Encoder_texture(nn.Module):
 class Decoder_texture(nn.Module):
     def __init__(self, n_ch_in = 256, n_ch_out = 3):
         super().__init__()
-        # older - nice but make huge dim
-        # self.spec = ReshapeLayer(128, 32)
-        # spec layer
         self.spec = nn.Sequential(
-            nn.ConvTranspose2d(n_ch_in, 128, kernel_size=(32,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
+            nn.ConvTranspose2d(n_ch_in, 128, kernel_size=(16,1), stride=(1,1), padding=(0,0), output_padding=(0,0)), 
             nn.BatchNorm2d(128),
             nn.ReLU())
         self.tconv0 = nn.Sequential(
@@ -353,7 +345,7 @@ class Decoder_texture(nn.Module):
             nn.BatchNorm2d(128),
             nn.ReLU())
         self.tconv1 = nn.Sequential(
-            nn.ConvTranspose2d(128, 64, kernel_size=(3,3), stride=2, padding=(1,1), output_padding=(1,1)), 
+            nn.ConvTranspose2d(128, 64, kernel_size=(3,3), stride=4, padding=(1,1), output_padding=(3,3)),
             nn.BatchNorm2d(64),
             nn.ReLU())
         self.tconv2 = nn.Sequential(
@@ -372,7 +364,7 @@ class Decoder_texture(nn.Module):
         return x
 
 # -------------------------------------------------
-# Encoder with reshape 
+# Shallower Encoder with reshape
 
 class ReshapeLayer(nn.Module):
     """ array of dim (b, ch, f, t) is reshaped to (b, ch*f, t) , or the reverse"""
@@ -483,18 +475,16 @@ if __name__ == "__main__":
     # summary(model_enc, (1, 3, 128, 1152), depth = 1)
     # summary(model_dec, (1, 256, 1, 36), depth = 1)
 
-    # model_enc = Encoder_texture(n_ch_in = 3, n_ch_out = 512)
-    # model_dec = Decoder_texture(n_ch_in = 512, n_ch_out = 3)
-    # # summary(model_enc, (1, 3, 128, 256), depth = 1)
-    # # summary(model_dec, (1, 4096, 1, 64), depth = 1)
-    # summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    # summary(model_dec, (1, 512, 1,  288), depth = 1)
-
-    # Encoder_reshape
-    model_enc = Encoder_reshape(n_ch_in = 3, n_ch_convout = 32)
-    model_dec = Decoder_reshape(n_ch_convout = 32, n_ch_out = 3)
+    model_enc = Encoder_texture(n_ch_in = 3, n_ch_out = 256)
+    model_dec = Decoder_texture(n_ch_in = 256, n_ch_out = 3)
     summary(model_enc, (1, 3, 128, 1152), depth = 1)
-    summary(model_dec, (1, 512, 1,  144), depth = 1)
+    summary(model_dec, (1, 256, 1,  144), depth = 1)
+
+    # # Encoder_reshape
+    # model_enc = Encoder_reshape(n_ch_in = 3, n_ch_convout = 32)
+    # model_dec = Decoder_reshape(n_ch_convout = 32, n_ch_out = 3)
+    # summary(model_enc, (1, 3, 128, 1152), depth = 1)
+    # summary(model_dec, (1, 512, 1,  144), depth = 1)
 
 
 

@@ -24,7 +24,7 @@ from importlib.resources import files
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("chaton-pourpre")
+print("requin-noir")
 
 
 class MakeColdAutoencoders:
@@ -92,7 +92,7 @@ class MakeColdAutoencoders:
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
-        # without transpose conv
+        # model without transpose conv
         Encoder = allmodels.Encoder_conv_L5_TP32 
         Decoder = allmodels.Decoder_conv_L5_TP32
         save_file_name = "conv_conv_L5_TP32"
@@ -120,11 +120,11 @@ class MakeColdAutoencoders:
         Encoder = allmodels.Encoder_texture 
         Decoder = allmodels.Decoder_texture
         save_file_name = "conv_tran_texture_01"
-        model_enc = Encoder(n_ch_in = 3, n_ch_out = 512)
-        model_dec = Decoder(n_ch_in = 512, n_ch_out = 3)
+        model_enc = Encoder(n_ch_in = 3, n_ch_out = 256)   
+        model_dec = Decoder(n_ch_in = 256, n_ch_out = 3)
         arch_di[save_file_name] = {}
         arch_di[save_file_name]['enc'] = summary(model_enc, (1, 3, 128, 1152), depth = 1, verbose  = 0)
-        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 512, 1, 288), depth = 1, verbose  = 0)
+        arch_di[save_file_name]['dec'] = summary(model_dec, (1, 256, 1, 144), depth = 1, verbose  = 0)
         torch.save(model_enc, os.path.join(self.dir_models, 'cold_encoder_' + save_file_name + '.pth'))
         torch.save(model_dec, os.path.join(self.dir_models, 'cold_decoder_' + save_file_name + '.pth'))
 
