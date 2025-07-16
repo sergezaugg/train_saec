@@ -24,7 +24,7 @@ from importlib.resources import files
 import train_saec.model_collection.model_collection as allmodels
 
 
-print("chaton-pourpre")
+print("requin-noir")
 
 
 class MakeColdAutoencoders:
