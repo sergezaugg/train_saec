@@ -19,7 +19,7 @@ dat_tes_dir = "dev/data/test/images"
 mca = MakeColdAutoencoders(dir_models = model_dir)
 mod_arch = mca.make()
 mod_arch.keys()
-mod_arch['conv_tran_textr_resh']
+mod_arch['conv_tran_texture_01']
 
 #----------------------------------------------------
 # Either, initialize a AEC-trainer with a naive model 
@@ -29,7 +29,7 @@ at = AutoencoderTrain(
 	dir_train_data = dat_tra_dir, 
     dir_test_data = dat_tes_dir,
 	hot_start = False, 
-    model_tag = "conv_tran_textr_resh", 
+    model_tag = "conv_tran_texture_01", 
     device = device
 	)
 
